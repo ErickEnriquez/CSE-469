@@ -41,3 +41,7 @@ Function Implemented:
 
       -o owner: Information about the lawful owner to whom the evidence was released. At this time, text is free-form and     
     does not have any requirements.
+
+# startup
+run the setup.sh file as sudo to install the path variable and create the bchoc initially, make sure that the setup file has its executable flag as on, you may need to restart the terminal to for changed to take effect
+
