@@ -1,6 +1,7 @@
 #Larissa Pokam
+#Erick Enriquez
 
-#Project1: Create a Blockchain that represent the chain of custody
+#Group Project: Create a Blockchain that represent the chain of custody
 
 import hashlib
 
