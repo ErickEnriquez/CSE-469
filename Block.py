@@ -28,12 +28,12 @@ class Block():
 
     def hashing(self):
         key = hashlib.sha1()        #hash using the SHA-1 algorithm
-        key.update(str(self.blockNumber).encode('utf-8'))
+        #key.update(str(self.blockNumber).encode('utf-8'))
         key.update(str(self.timestamp).encode('utf-8'))
         key.update(str(self.state).encode('utf-8'))
         key.update(str(self.caseID).encode('utf-8'))
         key.update(str(self.data).encode('utf-8'))
         key.update(str(self.prevHash).encode('utf-8'))
         key.update(str(self.evidenceID).encode('utf-8'))
-        key.update(str(self.parent).encode('utf-8'))
+        #key.update(str(self.parent).encode('utf-8'))
         return key.hexdigest() #the hash of the current block

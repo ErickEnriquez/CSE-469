@@ -41,7 +41,7 @@ STATE = {
 }
 INITIAL = Block(
     prev_hash=0,  # 20 bytes
-    timestamp= datetime.datetime.now().isoformat(),  # 08 bytes
+    timestamp=0,  # 08 bytes
     case_id=UUID(int=0),  # 16 bytes
     evidence_id=0,  # 04 bytes
     state=STATE["init"],  # 11 bytes
@@ -84,7 +84,10 @@ fp = open('data.bin','rb')
 block = fp.read(68)
 blockContents = block_head_struct.unpack(block)
 timestamp = datetime.fromtimestamp(blockContents[1])
-
+datalen = blockContents[5]
+data = fp.read(datalen)
+data = data.decode('utf-8')
+print(data)
 print(timestamp)
 #print(blockContents)
 

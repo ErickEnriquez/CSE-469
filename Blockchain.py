@@ -1,15 +1,20 @@
 # Larissa Pokam
+# Erick Enriquez
 
 # Project1: Create a Blockchain that represent the chain of custody
 
 import datetime
 import uuid
+import struct
+from datetime import datetime, timedelta, timezone
+import sys
+import os
 
 from Block import Block
 
 
-# import Block
-# Block.Block()
+import Block
+Block.Block()
 
 
 # blocks = Block.Block()
