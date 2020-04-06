@@ -22,8 +22,16 @@ class Blockchain():
 
     # Create the initial block
     def first(self):
-        return Block(0, 000, datetime.datetime.now().isoformat(), uuid.uuid1(), "None", "INITIAL", 14, "Initial BLock",
-                     -1)
+        return Block(
+        0,
+        000,
+        datetime.datetime.now().isoformat(),
+        uuid.uuid1(),
+        "None", 
+        STATE['init'], 
+        14, 
+        b"Initial BLock\0",
+        )
 
     # Add a new block to the chain and make sure there is no item duplicate
     def add(self, case, item):
@@ -213,3 +221,19 @@ class Blockchain():
             print("State of blockchain: CLEAN")
 
         return flag
+
+
+STATE = {
+    "init": b"INITIAL\0\0\0\0",
+    "in": b"CHECKEDIN\0\0",
+    "out": b"CHECKEDOUT\0",
+    "dis": b"DISPOSED\0\0\0",
+    "des": b"DESTROYED\0\0",
+    "rel": b"RELEASED\0\0\0",
+    "INITIAL": b"INITIAL\0\0\0\0",
+    "CHECKEDIN": b"CHECKEDIN\0\0",
+    "CHECKEDOUT": b"CHECKEDOUT\0",
+    "DISPOSED": b"DISPOSED\0\0\0",
+    "DESTROYED": b"DESTROYED\0\0",
+    "RELEASED": b"RELEASED\0\0\0",
+}
