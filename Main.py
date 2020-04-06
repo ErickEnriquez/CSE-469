@@ -6,6 +6,8 @@ import argparse  # parsing sys.argv line args
 import os
 import sys
 import os.path
+import Block
+from BlockPack import pack_block,unpack #functions I created to pack and unpack a block
 #bc = Blockchain()  # Create a blockchain object
 
 ##############################################################
@@ -17,9 +19,7 @@ if os.path.exists('data.bin'):
     file_exists=True
 else:
     file_exists=False
-
-
-print('file found = ', file_exists)
+###############################################################
 
 
 arguments = sys.argv[1:]  # grab everything in list except executable name
@@ -29,8 +29,20 @@ parser = argparse.ArgumentParser()  # parser object
 
 
 if sys.argv[1] == "init":
-    # init stuff here
-    print("Sanity check. Only starts up and checks for the initial block.")
+    # init stuff here 
+    if file_exists == True:
+        with open('data.bin','rb') as fp:
+           block_bytes = fp.read(68) #read 68 bytes of struct header
+           initial_block = unpack(block_bytes)  #unpack the bytes and return a block object
+        print('Blockchain file found with INITIAL block.')
+    else:#no blockchain file , need to create one with initial block
+        initial_block = Block.create_initial_block() # create initial block
+        block_bytes= pack_block(initial_block) #back the inital block into bytes
+        with open('data.bin','wb') as fp:   #open a data.bin file
+            fp.write(block_bytes)#write the initial block to binary file
+            fp.write(initial_block.data) # write the block data to file (make sure the string is in bytes)
+        print('Blockchain file not found. Created INITIAL block.')
+
 elif sys.argv[1] == 'verify':
     # verify code here
     print("Parse the blockchain and validate all entries.")
@@ -56,7 +68,7 @@ elif sys.argv[1] == 'checkout':
 elif sys.argv[1] == 'log':
     parser.add_argument('log', help="Display the blockchain entries giving the oldest first (unless -r is given).")
     parser.add_argument('-r', '--reverse',
-                        help="Reverses the order of the block entries to show the most recent entries first.")  # optional arg
+                        help="Reverses the order of the block entries to show the most recent entries first.")  # optional arg NEED TO FIX THIS ONE it is expect something after -r
     parser.add_argument('-n',
                         help="When used with log, shows num_entries number of block entries.")  # optional arg
     parser.add_argument('-c', help="Specifies the case identifier that the evidence is associated with. Must be a valid UUID. When used with log only blocks with the given case_id are returned.")  # optional arg
@@ -78,3 +90,6 @@ elif sys.argv[1] == 'remove':
     parser.add_argument(
         '-o', help="Information about the lawful owner to whom the evidence was released. At this time, text is free-form and does not have any requirements.")
     print('remove')
+
+
+
