@@ -53,7 +53,9 @@ elif sys.argv[1] == 'add':
     parser.add_argument('-i', nargs=argparse.REMAINDER, help="Specifies the evidence item’s identifier. When used with log only blocks with the given item_id are returned. The item_ID must be unique within the blockchain. This means you cannot re-add an evidence item once the remove action has been performed on it.")
     args = parser.parse_args(arguments)
     bc.add_initial_block()
-    bc.add(args.c,args.i[0])#adding 1 item only for now
+
+    for j in range(0,len(args.i)):
+        bc.add(args.c,args.i[j])
     
     with open('data.bin','wb') as fp:
          for i in range (0,len(bc.blocks)):
@@ -61,6 +63,7 @@ elif sys.argv[1] == 'add':
             fp.write(block_bytes)
             fp.write(bc.blocks[i].data.encode('utf-8'))
     print('done')
+
 elif sys.argv[1] == 'checkin':
     parser.add_argument(
         'checkin', help="Add a new checkin entry to the chain of custody for the given evidence item. Checkin actions may only be performed on evidence items that have already been added to the blockchain.")

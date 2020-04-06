@@ -128,11 +128,11 @@ class Blockchain():
             if self.blocks[j].evidenceID == itemid:
                 exists = 1
                 if self.blocks[j].state == 'CHECKEDOUT':
-                    self.blocks.append(Block(len(self.blocks),
-                                             self.blocks[len(self.blocks) - 1].hash,
-                                             datetime.datetime.now().isoformat(),
-                                             self.blocks[j].caseID, itemid, "CHECKEDIN", 14, "data",
-                                             len(self.blocks) - 1))
+                    #self.blocks.append(Block.Block(len(self.blocks),
+                     #                        self.blocks[len(self.blocks) - 1].hash,
+                      #                       datetime.datetime.now().isoformat(),
+                      #                       self.blocks[j].caseID, itemid, "CHECKEDIN", 14, "data",
+                      #                       len(self.blocks) - 1))
                     print('Case: ', self.blocks[j + 1].caseID)
                     print('Checked out item: ', self.blocks[j + 1].evidenceID)
                     print('Status: ', self.blocks[j + 1].state)
@@ -155,11 +155,11 @@ class Blockchain():
             if self.blocks[j].evidenceID == itemID:
                 exist = 1
                 if self.blocks[j].state == 'CHECKEDIN':
-                    self.blocks.append(Block(len(self.blocks),
-                                             self.blocks[len(self.blocks) - 1].hash,
-                                             datetime.datetime.now().isoformat(),
-                                             self.blocks[j].caseID, itemID, "CHECKEDOUT", 14, "data",
-                                             len(self.blocks) - 1))
+                  #  self.blocks.append(Block(len(self.blocks),
+                   #                          self.blocks[len(self.blocks) - 1].hash,
+                    #                         datetime.datetime.now().isoformat(),
+                     #                        self.blocks[j].caseID, itemID, "CHECKEDOUT", 14, "data",
+                      #                       len(self.blocks) - 1))
                     print('Case: ', self.blocks[len(self.blocks) - 1].caseID)
                     print('Checked out item: ', self.blocks[len(self.blocks) - 1].evidenceID)
                     print('Status: ', self.blocks[len(self.blocks) - 1].state)
