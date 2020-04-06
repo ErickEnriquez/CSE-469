@@ -19,7 +19,7 @@ from uuid import UUID, uuid4
 import math
 
 import Block
-import Blockchain
+
 
 
 
@@ -59,6 +59,13 @@ def unpack(block_bytes):
         block_contents[5]
     )
     return newBlock
+
+
+
+
+
+
+
 
 
 

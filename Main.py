@@ -1,14 +1,13 @@
 #! /usr/bin/env python3
 
-# from Project_BlockChain import Blockcain
-#from Blockchain import Blockchain
 import argparse  # parsing sys.argv line args
 import os
 import sys
 import os.path
 import Block
 from BlockPack import pack_block,unpack #functions I created to pack and unpack a block
-#bc = Blockchain()  # Create a blockchain object
+from Blockchain import Blockchain
+import datetime
 
 ##############################################################
 # check if the file exists
@@ -21,6 +20,7 @@ else:
     file_exists=False
 ###############################################################
 
+bc = Blockchain()   #initialize the blockchain
 
 arguments = sys.argv[1:]  # grab everything in list except executable name
 
@@ -52,7 +52,15 @@ elif sys.argv[1] == 'add':
     # makes a list of the remaining numbers
     parser.add_argument('-i', nargs=argparse.REMAINDER, help="Specifies the evidence item’s identifier. When used with log only blocks with the given item_id are returned. The item_ID must be unique within the blockchain. This means you cannot re-add an evidence item once the remove action has been performed on it.")
     args = parser.parse_args(arguments)
-    print(args.i)
+    bc.add_initial_block()
+    bc.add(args.c,args.i[0])#adding 1 item only for now
+    
+    with open('data.bin','wb') as fp:
+         for i in range (0,len(bc.blocks)):
+            block_bytes= pack_block(bc.blocks[i])
+            fp.write(block_bytes)
+            fp.write(bc.blocks[i].data.encode('utf-8'))
+    print('done')
 elif sys.argv[1] == 'checkin':
     parser.add_argument(
         'checkin', help="Add a new checkin entry to the chain of custody for the given evidence item. Checkin actions may only be performed on evidence items that have already been added to the blockchain.")

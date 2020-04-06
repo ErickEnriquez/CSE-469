@@ -9,9 +9,11 @@ import struct
 from datetime import datetime, timedelta, timezone
 import sys
 import os
+from uuid import UUID
 
 from Block import Block
-
+from BlockPack import unpack, pack_block
+import binascii
 
 import Block
 #Block.Block()
@@ -23,20 +25,15 @@ class Blockchain():
 
     # Blockchain Constructor
     def __init__(self):
-        self.blocks = [self.first()]  # Create a list containing the initial element
+        self.blocks = []  # create empty list to hold items
 
-    # Create the initial block
-    def first(self):
-        return Block(
-        0,
-        000,
-        datetime.datetime.now().isoformat(),
-        uuid.uuid1(),
-        "None", 
-        STATE['init'], 
-        14, 
-        b"Initial BLock\0",
-        )
+    def add_initial_block( self):
+        with open('data.bin','rb') as fp:
+            block_bytes = fp.read(68)
+            initial_block = unpack(block_bytes)
+            data_bytes = fp.read(14)
+            initial_block.data = data_bytes.decode('utf-8')
+        self.blocks.append(initial_block)
 
     # Add a new block to the chain and make sure there is no item duplicate
     def add(self, case, item):
@@ -45,15 +42,19 @@ class Blockchain():
             if self.blocks[j].evidenceID == item:
                 exist = 1
         if exist == 1:
-            print("This item had already been checkedin (already exist)")
+            sys.exit("This item had already been checkedin (already exist)")
         else:
-            self.blocks.append(Block(len(self.blocks),
-                                     self.blocks[len(self.blocks) - 1].hash,
-                                     datetime.datetime.now().isoformat(),
-                                     case, item, "CHECKEDIN", 14, "data", len(self.blocks) - 1))
+            self.blocks.append(Block.Block(
+                                    self.blocks[len(self.blocks) - 1].hash, #prev hash
+                                    datetime.now().isoformat(),             #timestamp
+                                    UUID(case),                                   #caseID
+                                    item,                                   #evidence id
+                                    STATE['in'],                            #state
+                                    0                                      #datalength
+                                     ))
             print('Case: ', self.blocks[len(self.blocks) - 1].caseID)
             print('Checked out item: ', self.blocks[len(self.blocks) - 1].evidenceID)
-            print('Status: ', self.blocks[len(self.blocks) - 1].state)
+            print('Status: ', self.blocks[len(self.blocks) - 1].state.decode('utf-8'))
             print('Time of action: ', self.blocks[len(self.blocks) - 1].timestamp)
 
     # Get the number of block in the chain
