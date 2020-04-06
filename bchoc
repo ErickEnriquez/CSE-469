@@ -5,7 +5,21 @@
 import argparse  # parsing sys.argv line args
 import os
 import sys
-# bc = Blockchain()  # Create a blockchain object
+import os.path
+#bc = Blockchain()  # Create a blockchain object
+
+##############################################################
+# check if the file exists
+##############################################################
+file_exists = True
+
+if os.path.exists('data.bin'):
+    file_exists=True
+else:
+    file_exists=False
+
+
+print('file found = ', file_exists)
 
 
 arguments = sys.argv[1:]  # grab everything in list except executable name

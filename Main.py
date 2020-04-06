@@ -5,18 +5,19 @@
 import argparse  # parsing sys.argv line args
 import os
 import sys
+import os.path
 #bc = Blockchain()  # Create a blockchain object
 
 ##############################################################
 # check if the file exists
 ##############################################################
 file_exists = True
-try:
-    fp = open('data.bin','rb')
-except IOError:
-    file_exists = False
-finally:
-    fp.close()
+
+if os.path.exists('data.bin'):
+    file_exists=True
+else:
+    file_exists=False
+
 
 print('file found = ', file_exists)
 
