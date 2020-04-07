@@ -46,7 +46,7 @@ class Blockchain():
         else:
             self.blocks.append(Block.Block(
                                     self.blocks[len(self.blocks) - 1].hash, #prev hash
-                                    datetime.now().isoformat(),             #timestamp
+                                    datetime.now(),             #timestamp
                                     UUID(case),                                   #caseID
                                     item,                                   #evidence id
                                     STATE['in'],                            #state
@@ -55,7 +55,7 @@ class Blockchain():
             print('Case: ', self.blocks[len(self.blocks) - 1].caseID)
             print('Checked out item: ', self.blocks[len(self.blocks) - 1].evidenceID)
             print('Status: ', self.blocks[len(self.blocks) - 1].state.decode('utf-8'))
-            print('Time of action: ', self.blocks[len(self.blocks) - 1].timestamp)
+            print('Time of action: ', self.blocks[len(self.blocks) - 1].timestamp.isoformat())
 
     # Get the number of block in the chain
     def size(self):

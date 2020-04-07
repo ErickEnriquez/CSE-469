@@ -1,14 +1,18 @@
 #! /usr/bin/env python3
-
+#import maya
 import argparse  # parsing sys.argv line args
 import os
 import sys
 import os.path
 import Block
 from Block import printBlock
-from BlockPack import pack_block,unpack #functions I created to pack and unpack a block
+from BlockPack import pack_block,unpack, pack_inital_block #functions I created to pack and unpack a block
 from Blockchain import Blockchain
 import datetime
+
+
+
+
 
 ##############################################################
 # check if the file exists
@@ -30,6 +34,8 @@ parser = argparse.ArgumentParser()  # parser object
 
 #=======================================================================================================================================================
 
+
+
 if sys.argv[1] == "init":
     # init stuff here 
     if file_exists == True:
@@ -39,19 +45,20 @@ if sys.argv[1] == "init":
         print('Blockchain file found with INITIAL block.')
     else:#no blockchain file , need to create one with initial block
         initial_block = Block.create_initial_block() # create initial block
-        block_bytes= pack_block(initial_block) #back the inital block into bytes
+        block_bytes= pack_inital_block(initial_block) #back the inital block into bytes
         with open('data.bin','wb') as fp:   #open a data.bin file
             fp.write(block_bytes)#write the initial block to binary file
             fp.write(initial_block.data) # write the block data to file (make sure the string is in bytes)
         print('Blockchain file not found. Created INITIAL block.')
 
-        
+
 #=======================================================================================================================================================
 elif sys.argv[1] == 'verify':
     # verify code here
     print("Parse the blockchain and validate all entries.")
 
 #=======================================================================================================================================================
+
 
 
 elif sys.argv[1] == 'add':
