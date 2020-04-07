@@ -33,7 +33,7 @@ class Block():
         key.update(str(self.data).encode('utf-8'))
         key.update(str(self.prevHash).encode('utf-8'))
         key.update(str(self.evidenceID).encode('utf-8'))
-        return key.hexdigest() #the hash of the current block
+        return key.digest() #the hash of the current block
     
 
 
@@ -53,6 +53,7 @@ def create_initial_block():
 
 #untility function to print the block
 def printBlock(Block):
+    print('\n')
     print(
     Block.prevHash, 
     Block.timestamp,
@@ -61,5 +62,6 @@ def printBlock(Block):
     Block.state,
     Block.dataLength,
     Block.data )
+    print('\n\n')
 
   

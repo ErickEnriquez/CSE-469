@@ -32,8 +32,19 @@ block_head_struct = struct.Struct(block_head_fmt)
 #======================================================================
 # packing the structure
 #======================================================================
-
 def pack_block(Block):
+    print('SIZE OF ' ,len(Block.timestamp))
+    block_bytes = block_head_struct.pack(
+        Block.prevHash,
+        Block.timestamp,
+        Block.caseID.bytes_le,
+        Block.evidenceID,
+        Block.state,
+        Block.dataLength,
+    )
+    return block_bytes
+
+def pack_inital_block(Block):
     block_bytes = block_head_struct.pack(
         bytes(Block.prevHash),
         Block.timestamp,
@@ -42,6 +53,7 @@ def pack_block(Block):
         Block.state,
         Block.dataLength,
     )
+    print('PACK DONE')
     return block_bytes
 
 ##########################################################################

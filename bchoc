@@ -5,6 +5,7 @@ import os
 import sys
 import os.path
 import Block
+from Block import printBlock
 from BlockPack import pack_block,unpack #functions I created to pack and unpack a block
 from Blockchain import Blockchain
 import datetime
@@ -56,13 +57,11 @@ elif sys.argv[1] == 'add':
 
     for j in range(0,len(args.i)):
         bc.add(args.c,args.i[j])
-    
-    with open('data.bin','wb') as fp:
-         for i in range (0,len(bc.blocks)):
+    with open('data.bin','ab') as fp:
+         for i in range (1,len(bc.blocks)):
             block_bytes= pack_block(bc.blocks[i])
             fp.write(block_bytes)
             fp.write(bc.blocks[i].data.encode('utf-8'))
-    print('done')
 
 elif sys.argv[1] == 'checkin':
     parser.add_argument(
