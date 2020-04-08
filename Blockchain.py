@@ -59,8 +59,11 @@ class Blockchain():
 
     # Get the number of block in the chain
     def size(self):
-        return len(self.blocks) - 1
+        return len(self.blocks)
 
+    #Take a block object and add it to the list
+    def fill_list(self, block) :
+        self.blocks.append(block)
 
 
     # This function count the number of entries for a given item in the blockchain
@@ -180,39 +183,40 @@ class Blockchain():
     def verify(self, isWrong=True):
         flag = True
         for i in range(1, len(self.blocks)):
-            count = 0
-            for k in range(1, len(self.blocks)):  # check if two block have same parent
-                if self.blocks[i].parent == self.blocks[k].parent:
-                    count = count + 1
-            if count > 1:
-                print("Transactions in blockchain: ", len(self.blocks))
-                print("State of blockchain: ERROR")
-                print("Bad block: ", i)
-                print("Two blocks found with the same parent")
+            #count = 0
+            #for k in range(1, len(self.blocks)):  # check if two block have same parent
+               # if self.blocks[i].parent == self.blocks[k].parent:
+               #     count = count + 1
+            #if count > 1:
+            #    print("Transactions in blockchain: ", len(self.blocks))
+            #    print("State of blockchain: ERROR")
+            #    print("Bad block: ", i)
+            #    print("Two blocks found with the same parent")
 
-            if self.blocks[i - 1].blockNumber != i - 1:  # check correct parent block number
-                flag = False
-                if isWrong:
-                    print("Transactions in blockchain: ", len(self.blocks))
-                    print("State of blockchain: ERROR")
-                    print("Bad block: ", i)
-                    print("Parent block: NOT FOUND")
+            #if self.blocks[i - 1].blockNumber != i - 1:  # check correct parent block number
+            #    flag = False
+            #    if isWrong:
+            #        print("Transactions in blockchain: ", len(self.blocks))
+            #        print("State of blockchain: ERROR")
+            #        print("Bad block: ", i)
+            #        print("Parent block: NOT FOUND")
 
-            elif self.blocks[i - 1].hash != self.blocks[i].prevHash:  # check that previous and current hash match
+            if self.blocks[i - 1].hash != self.blocks[i].prevHash:  # check that previous and current hash match
                 flag = False
+                print(binascii.hexlify(self.blocks[i - 1].hash) , binascii.hexlify(self.blocks[i].prevHash))
                 if isWrong:
                     print("Transactions in blockchain: ", len(self.blocks))
                     print("State of blockchain: ERROR")
                     print("Bad block: ", i)
                     print("Block contents do not block checksum")
 
-            elif self.blocks[i].hash != self.blocks[i].hashing():  # CHeck if correct hash value were saved
-                flag = False
-                if isWrong:
-                    print("Transactions in blockchain: ", len(self.blocks))
-                    print("State of blockchain: ERROR")
-                    print("Bad block: ", i)
-                    print('Wrong hash at block number: ', i)
+            #elif self.blocks[i].hash != self.blocks[i].hashing():  # Check if correct hash value were saved
+            #    flag = False
+            #    if isWrong:
+            #        print("Transactions in blockchain: ", len(self.blocks))
+            #        print("State of blockchain: ERROR")
+            #        print("Bad block: ", i)
+            #        print('Wrong hash at block number: ', i)
 
             elif self.blocks[i - 1].timestamp >= self.blocks[
                 i].timestamp:  # Check if block time were registered accordinaly

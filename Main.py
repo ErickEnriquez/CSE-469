@@ -56,6 +56,22 @@ if sys.argv[1] == "init":
 elif sys.argv[1] == 'verify':
     # verify code here
     print("Parse the blockchain and validate all entries.")
+    done = False
+    with open('data.bin','rb') as fp:
+        while True:
+            data_bytes = fp.read(68) # read the file to get bytes
+            if not data_bytes:
+                break
+            block = unpack(data_bytes) # unpack the bytes
+            block.data = fp.read(block.dataLength) # read the amount of blocks of data we have
+            bc.fill_list(block)
+    bc.verify()
+            
+
+
+
+
+
 
 #=======================================================================================================================================================
 
