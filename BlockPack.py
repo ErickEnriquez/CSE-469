@@ -66,7 +66,10 @@ def pack_inital_block(Block):
 ##########################################################################
 
 def unpack(block_bytes):
-    block_contents = block_head_struct.unpack(block_bytes)
+    try:
+        block_contents = block_head_struct.unpack(block_bytes)
+    except struct.error:
+        print('ERROR UNPACKING')
     newBlock = Block.Block(
         block_contents[0],
         block_contents[1],

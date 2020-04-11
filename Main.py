@@ -11,6 +11,8 @@ from Blockchain import Blockchain
 import datetime
 
 
+os.environ['BCHOC_FILE_PATH'] = 'data.bin' #THIS IS HERE FOR TESTING, NEEDS TO BE COMMENTED OUT WHEN SUBMITTING
+
 try: 
     print("BCHOC FILE PATH:", os.environ['BCHOC_FILE_PATH']) 
 except KeyError:  
@@ -32,7 +34,6 @@ parser = argparse.ArgumentParser()  # parser object
 
 if sys.argv[1] == "init":
     # init stuff here 
-   
     if os.path.exists(os.environ['BCHOC_FILE_PATH']) == False:# check if file exists
         initial_block = Block.create_initial_block() # create initial block
         block_bytes= pack_inital_block(initial_block) #back the inital block into bytes
