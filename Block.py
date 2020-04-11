@@ -34,7 +34,6 @@ class Block():
         key.update(str(self.data).encode('utf-8'))
         key.update(str(self.prevHash).encode('utf-8'))
         key.update(str(self.evidenceID).encode('utf-8'))
-        print(binascii.hexlify(key.digest()))
         return key.digest() #the hash of the current block
     
 
