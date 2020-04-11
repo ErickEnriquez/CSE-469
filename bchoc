@@ -11,18 +11,12 @@ from Blockchain import Blockchain
 import datetime
 
 
+try: 
+    print("BCHOC FILE PATH:", os.environ['BCHOC_FILE_PATH']) 
+except KeyError:  
+    print("Environment variable does not exist") 
 
 
-
-##############################################################
-# check if the file exists
-##############################################################
-file_exists = True
-
-if os.path.exists('data.bin'):
-    file_exists=True
-else:
-    file_exists=False
 ###############################################################
 
 bc = Blockchain()   #initialize the blockchain
@@ -38,21 +32,20 @@ parser = argparse.ArgumentParser()  # parser object
 
 if sys.argv[1] == "init":
     # init stuff here 
-    if file_exists == True:
-        with open('data.bin','rb') as fp:
-           block_bytes = fp.read(68) #read 68 bytes of struct header
-           initial_block = unpack(block_bytes)  #unpack the bytes and return a block object
-        print('Blockchain file found with INITIAL block.')
-    else:#no blockchain file , need to create one with initial block
+   
+   # try
+    #    with open(os.environ['BCHOC_FILE_PATH'],'rb') as fp:
+    #       block_bytes = fp.read(68) #read 68 bytes of struct header
+    #       initial_block = unpack(block_bytes)  #unpack the bytes and return a block object
+    #    print('Blockchain file found with INITIAL block.')
+    #else:#no blockchain file , need to create one with initial block
         initial_block = Block.create_initial_block() # create initial block
         block_bytes= pack_inital_block(initial_block) #back the inital block into bytes
-        with open('data.bin','wb') as fp:   #open a data.bin file
+        with open(os.environ['BCHOC_FILE_PATH'],'wb') as fp:   #open a data.bin file
             fp.write(block_bytes)#write the initial block to binary file
             fp.write(initial_block.data) # write the block data to file (make sure the string is in bytes)
         print('Blockchain file not found. Created INITIAL block.')
-        os.environ['BCHOC_FILE_PATH'] = os.path.abspath('data.bin')
-        BCHOC_FILE_PATH = os.environ['BCHOC_FILE_PATH']
-        print(BCHOC_FILE_PATH)
+       
 
 
 #=======================================================================================================================================================
