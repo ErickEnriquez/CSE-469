@@ -11,13 +11,23 @@ from Blockchain import Blockchain
 import datetime
 
 
-os.environ['BCHOC_FILE_PATH'] = 'data.bin'
 
-try: 
-    print("BCHOC FILE PATH:", os.environ['BCHOC_FILE_PATH']) 
-except KeyError:  
-    print("Environment variable does not exist") 
 
+#os.environ['BCHOC_FILE_PATH'] = 'data.bin' #THIS IS HERE FOR TESTING, NEEDS TO BE COMMENTED OUT WHEN SUBMITTING
+
+#try: 
+#    print("BCHOC FILE PATH:", os.environ['BCHOC_FILE_PATH']) 
+#except KeyError:  
+#    print("Environment variable does not exist") 
+
+
+
+###############################################################
+#checks if the inital block exists, if not it returns no intial block error
+def check_if_initial_block(file_path):
+    if os.path.exists(os.environ['BCHOC_FILE_PATH']):
+        return True
+    sys.exit('No initial Block Exists')
 
 ###############################################################
 
@@ -33,11 +43,13 @@ parser = argparse.ArgumentParser()  # parser object
 
 
 if sys.argv[1] == "init":
-    # init stuff here 
-    if os.path.exists(os.environ['BCHOC_FILE_PATH']) == False:# check if file exists
+ 
+    if len(sys.argv) > 2: #make sure we aren't adding extra arguments
+        sys.exit('Invalid Parameters')
+    if os.path.exists(os.environ['BCHOC_FILE_PATH']) == False:# if file doesn't exist
         initial_block = Block.create_initial_block() # create initial block
-        block_bytes= pack_inital_block(initial_block) #back the inital block into bytes
-        with open(os.environ['BCHOC_FILE_PATH'],'wb') as fp:   #open a data.bin file
+        block_bytes= pack_inital_block(initial_block) #pack the inital block into bytes
+        with open(os.environ['BCHOC_FILE_PATH'],'wb') as fp:   #open a file to store block
             fp.write(block_bytes)#write the initial block to binary file
             fp.write(initial_block.data) # write the block data to file (make sure the string is in bytes)
         print('Blockchain file not found. Created INITIAL block.')
@@ -47,7 +59,6 @@ if sys.argv[1] == "init":
            block_bytes = fp.read(68) #read 68 bytes of struct header
            initial_block = unpack(block_bytes)  #unpack the bytes and return a block object
            printBlock(initial_block)
-
          print('Blockchain file found with INITIAL block.')
        
 
@@ -83,11 +94,16 @@ elif sys.argv[1] == 'add':
     # makes a list of the remaining numbers
     parser.add_argument('-i', nargs=argparse.REMAINDER, help="Specifies the evidence item’s identifier. When used with log only blocks with the given item_id are returned. The item_ID must be unique within the blockchain. This means you cannot re-add an evidence item once the remove action has been performed on it.")
     args = parser.parse_args(arguments)
+    
+    #----------
+    check_if_initial_block(os.environ['BCHOC_FILE_PATH'])
+    #----------
+    
     bc.add_initial_block()
 
     for j in range(0,len(args.i)):
         bc.add(args.c,args.i[j])
-    with open('data.bin','ab') as fp:
+    with open(os.environ['BCHOC_FILE_PATH'],'ab') as fp:
          for i in range (1,len(bc.blocks)):
             block_bytes= pack_block(bc.blocks[i])
             fp.write(block_bytes)
@@ -145,4 +161,5 @@ elif sys.argv[1] == 'remove':
 
 
 #=======================================================================================================================================================
+
 
