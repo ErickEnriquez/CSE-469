@@ -28,7 +28,7 @@ class Blockchain():
         self.blocks = []  # create empty list to hold items
 
     def add_initial_block( self):
-        with open('data.bin','rb') as fp:
+        with open(os.environ['BCHOC_FILE_PATH'],'rb') as fp:
             block_bytes = fp.read(68)
             initial_block = unpack(block_bytes)
             data_bytes = fp.read(14)
