@@ -33,18 +33,21 @@ parser = argparse.ArgumentParser()  # parser object
 if sys.argv[1] == "init":
     # init stuff here 
    
-   # try
-    #    with open(os.environ['BCHOC_FILE_PATH'],'rb') as fp:
-    #       block_bytes = fp.read(68) #read 68 bytes of struct header
-    #       initial_block = unpack(block_bytes)  #unpack the bytes and return a block object
-    #    print('Blockchain file found with INITIAL block.')
-    #else:#no blockchain file , need to create one with initial block
+    if os.path.getsize(os.environ['BCHOC_FILE_PATH']) == 0:
+        print('EMPTY FILE')
         initial_block = Block.create_initial_block() # create initial block
         block_bytes= pack_inital_block(initial_block) #back the inital block into bytes
         with open(os.environ['BCHOC_FILE_PATH'],'wb') as fp:   #open a data.bin file
             fp.write(block_bytes)#write the initial block to binary file
             fp.write(initial_block.data) # write the block data to file (make sure the string is in bytes)
         print('Blockchain file not found. Created INITIAL block.')
+        
+    else:#no blockchain file , need to create one with initial block
+         with open(os.environ['BCHOC_FILE_PATH'],'rb') as fp:
+           block_bytes = fp.read(68) #read 68 bytes of struct header
+           initial_block = unpack(block_bytes)  #unpack the bytes and return a block object
+
+         print('Blockchain file found with INITIAL block.')
        
 
 
