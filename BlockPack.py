@@ -69,7 +69,7 @@ def unpack(block_bytes):
     try:
         block_contents = block_head_struct.unpack(block_bytes)
     except struct.error:
-        print('ERROR UNPACKING')
+        sys.exit('Error Unpacking Data')
     newBlock = Block.Block(
         block_contents[0],
         block_contents[1],
