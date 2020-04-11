@@ -11,7 +11,7 @@ from Blockchain import Blockchain
 import datetime
 
 
-os.environ['BCHOC_FILE_PATH'] = 'data.bin' #THIS IS HERE FOR TESTING, NEEDS TO BE COMMENTED OUT WHEN SUBMITTING
+#os.environ['BCHOC_FILE_PATH'] = 'data.bin' #THIS IS HERE FOR TESTING, NEEDS TO BE COMMENTED OUT WHEN SUBMITTING
 
 try: 
     print("BCHOC FILE PATH:", os.environ['BCHOC_FILE_PATH']) 
