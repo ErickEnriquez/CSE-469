@@ -23,11 +23,17 @@ import datetime
 
 
 ###############################################################
-#checks if the inital block exists, if not it returns no intial block error
+#checks if the inital block exists, if not it creates inital block and returns false
 def check_if_initial_block(file_path):
     if os.path.exists(os.environ['BCHOC_FILE_PATH']):
         return True
-    sys.exit('No initial Block Exists')
+        initial_block = Block.create_initial_block() # create initial block
+        block_bytes= pack_inital_block(initial_block) #pack the inital block into bytes
+        with open(os.environ['BCHOC_FILE_PATH'],'wb') as fp:   #open a file to store block
+            fp.write(block_bytes)#write the initial block to binary file
+            fp.write(initial_block.data) # write the block data to file (make sure the string is in bytes)
+        print('Blockchain file not found. Created INITIAL block.')
+        return False
 
 ###############################################################
 
