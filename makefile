@@ -4,6 +4,7 @@ make: Main.py
 
 clean:
 	rm bchoc 
+	rm data.bin
 
 init_test:
 	./bchoc init
