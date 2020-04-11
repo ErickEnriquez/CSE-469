@@ -33,8 +33,7 @@ parser = argparse.ArgumentParser()  # parser object
 if sys.argv[1] == "init":
     # init stuff here 
    
-    if os.path.getsize(os.environ['BCHOC_FILE_PATH']) == 0:
-        print('EMPTY FILE')
+    if os.path.exists(os.environ['BCHOC_FILE_PATH']):# check if file exists
         initial_block = Block.create_initial_block() # create initial block
         block_bytes= pack_inital_block(initial_block) #back the inital block into bytes
         with open(os.environ['BCHOC_FILE_PATH'],'wb') as fp:   #open a data.bin file
