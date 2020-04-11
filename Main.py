@@ -46,6 +46,7 @@ if sys.argv[1] == "init":
          with open(os.environ['BCHOC_FILE_PATH'],'rb') as fp:
            block_bytes = fp.read(68) #read 68 bytes of struct header
            initial_block = unpack(block_bytes)  #unpack the bytes and return a block object
+           printBlock(initial_block)
 
          print('Blockchain file found with INITIAL block.')
        
