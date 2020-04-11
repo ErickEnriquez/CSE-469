@@ -50,6 +50,7 @@ if sys.argv[1] == "init":
             fp.write(block_bytes)#write the initial block to binary file
             fp.write(initial_block.data) # write the block data to file (make sure the string is in bytes)
         print('Blockchain file not found. Created INITIAL block.')
+        BCHOC_FILE_PATH = os.environ['data.bin']
 
 
 #=======================================================================================================================================================
