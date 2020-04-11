@@ -1,5 +1,5 @@
-#! /usr/bin/env python3
-#import maya
+#!/usr/bin/env python
+
 import argparse  # parsing sys.argv line args
 import os
 import sys

@@ -1,4 +1,4 @@
-build-file: Main.py
+make: Main.py
 	cp Main.py bchoc
 	chmod +x bchoc
 
