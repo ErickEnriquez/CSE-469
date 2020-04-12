@@ -13,7 +13,7 @@ import datetime
 
 
 
-#os.environ['BCHOC_FILE_PATH'] = 'data.bin' #THIS IS HERE FOR TESTING, NEEDS TO BE COMMENTED OUT WHEN SUBMITTING
+os.environ['BCHOC_FILE_PATH'] = 'data.bin' #THIS IS HERE FOR TESTING, NEEDS TO BE COMMENTED OUT WHEN SUBMITTING
 
 #try: 
 #    print("BCHOC FILE PATH:", os.environ['BCHOC_FILE_PATH']) 
@@ -24,18 +24,34 @@ import datetime
 
 ###############################################################
 #checks if the inital block exists, if not it creates inital block and returns false
-def check_if_initial_block(file_path):
+def check_if_initial_block(file_path , bc):
     if os.path.exists(os.environ['BCHOC_FILE_PATH']):
         return True
+    else:
         initial_block = Block.create_initial_block() # create initial block
         block_bytes= pack_inital_block(initial_block) #pack the inital block into bytes
         with open(os.environ['BCHOC_FILE_PATH'],'wb') as fp:   #open a file to store block
             fp.write(block_bytes)#write the initial block to binary file
             fp.write(initial_block.data) # write the block data to file (make sure the string is in bytes)
         print('Blockchain file not found. Created INITIAL block.')
+        bc.blocks.append(initial_block)
         return False
 
 ###############################################################
+
+
+
+#def add_initial_block(bc):
+#    initial_block = Block.create_initial_block() # create initial block
+#    block_bytes= pack_inital_block(initial_block) #pack the inital block into bytes
+#    with open(os.environ['BCHOC_FILE_PATH'],'wb') as fp:   #open a file to store block
+#        fp.write(block_bytes)#write the initial block to binary file
+#        fp.write(initial_block.data) # write the block data to file (make sure the string is in bytes)
+#    print('Blockchain file not found. Created INITIAL block.')
+#    bc.blocks.append(initial_block)
+        
+
+###################################################################
 
 bc = Blockchain()   #initialize the blockchain
 
@@ -101,11 +117,9 @@ elif sys.argv[1] == 'add':
     parser.add_argument('-i', nargs=argparse.REMAINDER, help="Specifies the evidence item’s identifier. When used with log only blocks with the given item_id are returned. The item_ID must be unique within the blockchain. This means you cannot re-add an evidence item once the remove action has been performed on it.")
     args = parser.parse_args(arguments)
     
-    #----------
-    check_if_initial_block(os.environ['BCHOC_FILE_PATH'])
-    #----------
-    
-    bc.add_initial_block()
+    #--------------------------------------------------------------------
+    check_if_initial_block(os.environ['BCHOC_FILE_PATH'], bc)
+    #--------------------------------------------------------------------
 
     for j in range(0,len(args.i)):
         bc.add(args.c,args.i[j])

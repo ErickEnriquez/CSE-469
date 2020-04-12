@@ -27,13 +27,6 @@ class Blockchain():
     def __init__(self):
         self.blocks = []  # create empty list to hold items
 
-    def add_initial_block( self):
-        with open(os.environ['BCHOC_FILE_PATH'],'rb') as fp:
-            block_bytes = fp.read(68)
-            initial_block = unpack(block_bytes)
-            data_bytes = fp.read(14)
-            initial_block.data = data_bytes.decode('utf-8')
-        self.blocks.append(initial_block)
 
     # Add a new block to the chain and make sure there is no item duplicate
     def add(self, case, item):
