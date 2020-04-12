@@ -42,7 +42,7 @@ def pack_block(Block):
     print( ' BYTES ARE ',temp)
     try:
         block_bytes = block_head_struct.pack(
-            Block.prevHash.encode(),
+            Block.prevHash,
             stamp,
             Block.caseID.bytes_le,
             Block.evidenceID,

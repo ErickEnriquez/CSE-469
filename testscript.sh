@@ -6,4 +6,4 @@ make
 
 make init_test
 
-make add_one_test
+make add_many_test
