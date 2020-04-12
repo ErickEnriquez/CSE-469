@@ -41,7 +41,7 @@ def pack_block(Block):
         block_bytes = block_head_struct.pack(
             Block.prevHash,
             stamp,
-            Block.caseID.bytes,
+            Block.caseID.bytes_le,
             Block.evidenceID,
             Block.state,
             Block.dataLength
@@ -66,7 +66,7 @@ def pack_odd_block(Block):
     block_bytes = block_head_struct.pack(
         bytes(Block.prevHash),
         stamp,
-        Block.caseID.bytes,
+        Block.caseID.bytes_le,
         Block.evidenceID,
         Block.state,
         Block.dataLength
