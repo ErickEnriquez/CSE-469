@@ -11,6 +11,11 @@ from Blockchain import Blockchain
 import datetime
 
 
+with open(os.environ['BCHOC_FILE_PATH']) as fp:
+    while True:
+        data = fp.read(68)
+        if not data:
+            print(data)
 
 
 #os.environ['BCHOC_FILE_PATH'] = 'data.bin' #THIS IS HERE FOR TESTING, NEEDS TO BE COMMENTED OUT WHEN SUBMITTING
