@@ -73,14 +73,11 @@ if sys.argv[1] == "init":
 #=======================================================================================================================================================
 elif sys.argv[1] == 'verify':
     # verify code here
-    print("Parse the blockchain and validate all entries.")
-    done = False
     with open(os.environ['BCHOC_FILE_PATH'],'rb') as fp:
-
         while True:
             data_bytes = fp.read(68) # read the file to get bytes
             print(data_bytes , '\nlength is ', len(data_bytes))
-            if len(data_bytes) == 1:
+            if len(data_bytes) == 1 or data_bytes is None:
                 break
             else:
                 block = unpack(data_bytes) # unpack the bytes
