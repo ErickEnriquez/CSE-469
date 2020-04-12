@@ -77,7 +77,7 @@ elif sys.argv[1] == 'verify':
         while True:
             data_bytes = fp.read(68) # read the file to get bytes
             print(data_bytes , '\nlength is ', len(data_bytes))
-            if len(data_bytes) == 1 or data_bytes is None:
+            if len(data_bytes) == 1 or len(data_bytes) == 0:
                 break
             else:
                 block = unpack(data_bytes) # unpack the bytes
