@@ -15,6 +15,8 @@ from Block import Block
 from BlockPack import unpack, pack_block
 import binascii
 
+from Block import hashing
+
 import Block
 #Block.Block()
 
@@ -38,7 +40,7 @@ class Blockchain():
             sys.exit("This item had already been checkedin (already exist)")
         else:
             self.blocks.append(Block.Block(
-                                    self.blocks[len(self.blocks) - 1].hash, #prev hash
+                                    hashing(self.blocks[len(self.blocks) - 1]), #prev hash
                                     datetime.now(),             #timestamp
                                     UUID(case),                                   #caseID
                                     item,                                   #evidence id

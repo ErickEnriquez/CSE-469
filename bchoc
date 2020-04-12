@@ -15,11 +15,6 @@ import datetime
 
 os.environ['BCHOC_FILE_PATH'] = 'data.bin' #THIS IS HERE FOR TESTING, NEEDS TO BE COMMENTED OUT WHEN SUBMITTING
 
-#try: 
-#    print("BCHOC FILE PATH:", os.environ['BCHOC_FILE_PATH']) 
-#except KeyError:  
-#    print("Environment variable does not exist") 
-
 
 
 ###############################################################
@@ -70,6 +65,7 @@ if sys.argv[1] == "init":
         sys.exit('Invalid Parameters')
     if os.path.exists(os.environ['BCHOC_FILE_PATH']) == False:# if file doesn't exist
         initial_block = Block.create_initial_block() # create initial block
+        printBlock(initial_block)
         block_bytes= pack_inital_block(initial_block) #pack the inital block into bytes
         with open(os.environ['BCHOC_FILE_PATH'],'wb') as fp:   #open a file to store block
             fp.write(block_bytes)#write the initial block to binary file

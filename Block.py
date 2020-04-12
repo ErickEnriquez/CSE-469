@@ -13,7 +13,7 @@ class Block():
 
     # init method or constructor of the block class
 
-    def __init__(self, prevHash, timestamp, caseID, evidenceID, state, dataLength, data='0'):#default value for data
+    def __init__(self ,prevHash, timestamp, caseID, evidenceID, state, dataLength, data='0'):#default value for data
         self.timestamp = timestamp
         self.state = state
         self.caseID = caseID
@@ -21,21 +21,20 @@ class Block():
         self.dataLength = int(dataLength)
         self.prevHash = prevHash
         self.evidenceID = int(evidenceID)
-        self.hash = self.hashing()
 
 
-    # This function defines the hash of the current block i H(Block[i]).
-
-    def hashing(self):
-        key = hashlib.sha1()        #hash using the SHA-1 algorithm
-        key.update(str(self.timestamp).encode('utf-8'))
-        key.update(str(self.state).encode('utf-8'))
-        key.update(str(self.caseID).encode('utf-8'))
-        key.update(str(self.data).encode('utf-8'))
-        key.update(str(self.prevHash).encode('utf-8'))
-        key.update(str(self.evidenceID).encode('utf-8'))
-        return key.digest() #the hash of the current block
     
+# This function defines the hash of the current block i H(Block[i]).
+
+def hashing(Block):
+    key = hashlib.sha1()        #hash using the SHA-1 algorithm
+    key.update(str(Block.timestamp).encode('utf-8'))
+    key.update(str(Block.state).encode('utf-8'))
+    key.update(str(Block.caseID).encode('utf-8'))
+    key.update(str(Block.data).encode('utf-8'))
+    key.update(str(Block.prevHash).encode('utf-8'))
+    key.update(str(Block.evidenceID).encode('utf-8'))
+    return key.digest() #the hash of the current block    
 
 
 
