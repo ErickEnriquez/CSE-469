@@ -52,7 +52,7 @@ class Blockchain():
                 self.blocks.append(Block.Block(
                                     
                                     hashing(self.blocks[len(self.blocks) - 1]), #prev hash
-                                    datetime.now(),             #timestamp
+                                    datetime.now(),                             #timestamp
                                     UUID(case),                                   #caseID
                                     item,                                   #evidence id
                                     STATE['in'],                            #state
