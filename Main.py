@@ -96,10 +96,12 @@ elif sys.argv[1] == 'add':
     parser.add_argument('add', help="Add a new evidence item to the blockchain and associate it with the given case identifier. For users convenience, more than one item_id may be given at a time, which will create a blockchain entry for each item without the need to enter the case_id multiple times. The state of a newly added item is CHECKEDIN. The given evidence ID must be unique(i.e., not already used in the blockchain) to be accepted.")
     parser.add_argument('-c', help="Specifies the case identifier that the evidence is associated with. Must be a valid UUID. When used with log only blocks with the given case_id are returned.")
     # makes a list of the remaining numbers
-    parser.add_argument('-i', nargs=argparse.REMAINDER, help="Specifies the evidence item’s identifier. When used with log only blocks with the given item_id are returned. The item_ID must be unique within the blockchain. This means you cannot re-add an evidence item once the remove action has been performed on it.")
+    parser.add_argument('-i', action='append', nargs=argparse.REMAINDER, help="Specifies the evidence item’s identifier. When used with log only blocks with the given item_id are returned. The item_ID must be unique within the blockchain. This means you cannot re-add an evidence item once the remove action has been performed on it.")
     args = parser.parse_args(arguments)
     if args.c is None:
-        sys.exit('PLEASE SUPPLE CASE ID')
+        sys.exit('PLEASE SUPPLY CASE ID')
+    elif args.i is None:
+        sys.exit('PLEASE SUPPLY A EVIDENCE ID')
     #--------------------------------------------------------------------
     result =  check_if_initial_block(os.environ['BCHOC_FILE_PATH'], bc)
     #--------------------------------------------------------------------
