@@ -68,7 +68,7 @@ def pack_odd_block(Block):
     stamp = datetime.timestamp(Block.timestamp) #create a timestamp
     case = Block.caseID.bytes
     temp = bytearray(case)
-    temp.reverse()
+    #temp.reverse()
     block_bytes = block_head_struct.pack(
         bytes(Block.prevHash),
         stamp,
