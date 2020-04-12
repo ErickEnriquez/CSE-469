@@ -75,12 +75,11 @@ if sys.argv[1] == "init":
             fp.write(block_bytes)#write the initial block to binary file
             fp.write(initial_block.data) # write the block data to file (make sure the string is in bytes)
         print('Blockchain file not found. Created INITIAL block.')
-        
     else:#no blockchain file , need to create one with initial block
          with open(os.environ['BCHOC_FILE_PATH'],'rb') as fp:
            block_bytes = fp.read(68) #read 68 bytes of struct header
            initial_block = unpack(block_bytes)  #unpack the bytes and return a block object
-           printBlock(initial_block)
+           #printBlock(initial_block)
          print('Blockchain file found with INITIAL block.')
        
 
