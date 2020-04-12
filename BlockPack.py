@@ -40,10 +40,9 @@ def pack_block(Block):
     case = Block.caseID.bytes
     temp = bytearray(case)
     temp.reverse()
-   
     try:
         block_bytes = block_head_struct.pack(
-            Block.prevHash.encode(),
+            Block.prevHash.encode(),#assuming this is a string
             stamp,
             temp,
             Block.evidenceID,
