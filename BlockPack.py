@@ -63,18 +63,15 @@ def pack_inital_block(Block):
 
 def pack_odd_block(Block):
     stamp = datetime.timestamp(Block.timestamp) #create a timestamp
-    try:
-        block_bytes = block_head_struct.pack(
-            bytes(Block.prevHash),
-            stamp,
-            Block.caseID.bytes_le,
-            Block.evidenceID,
-            Block.state,
-            Block.dataLength
+    block_bytes = block_head_struct.pack(
+        bytes(Block.prevHash),
+        stamp,
+        Block.caseID.bytes_le,
+        Block.evidenceID,
+        Block.state,
+        Block.dataLength
         )
-    except struct.error:
-        sys.exit('ERROR PACKING BLOCK')
-    return block_bytes,
+    return block_bytes
 
 ##########################################################################
 # Unpacking structure and returning a block object
