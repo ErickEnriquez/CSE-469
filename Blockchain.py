@@ -195,8 +195,7 @@ class Blockchain():
                     print("Transactions in blockchain: ", len(self.blocks))
                     print("State of blockchain: ERROR")
                     print("Bad block: ", i)
-                    print("Block contents do not block checksum")
-
+                    sys.exit("Block contents do not block checksum")
             #elif self.blocks[i].hash != self.blocks[i].hashing():  # Check if correct hash value were saved
             #    flag = False
             #    if isWrong:
@@ -212,7 +211,7 @@ class Blockchain():
                     print("Transactions in blockchain: ", len(self.blocks))
                     print("State of blockchain: ERROR")
                     print("Bad block: ", i)
-                    print('Backdating at block')
+                    sys.exit('Backdating at block')
         if flag:
             print("Transactions in blockchain: ", len(self.blocks) - 1)
             print("State of blockchain: CLEAN")

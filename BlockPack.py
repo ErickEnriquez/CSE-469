@@ -44,7 +44,7 @@ def pack_block(Block):
         block_bytes = block_head_struct.pack(
             Block.prevHash,
             stamp,
-            Block.caseID.bytes_le,
+            temp,
             Block.evidenceID,
             Block.state,
             Block.dataLength
@@ -68,7 +68,7 @@ def pack_odd_block(Block):
     stamp = datetime.timestamp(Block.timestamp) #create a timestamp
     case = Block.caseID.bytes
     temp = bytearray(case)
-    #temp.reverse()
+    temp.reverse()
     block_bytes = block_head_struct.pack(
         bytes(Block.prevHash),
         stamp,
@@ -91,7 +91,7 @@ def unpack(block_bytes):
     newBlock = Block.Block(
         block_contents[0],
         block_contents[1],
-        block_contents[2],
+        UUID(bytes=block_contents[2]),
         block_contents[3],
         block_contents[4],
         block_contents[5]
