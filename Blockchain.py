@@ -182,35 +182,15 @@ class Blockchain():
             print('Can not check out a checked out item. Must check it in first')
 
     # This function verify the following:
-    # check if two block have same parent
-    # check if each block has a correct parent block number
     # Verify if H(blocks[i]) is correctly stored in next block’s previous_hash.
     # if an item was attended to modified after been checkout
 
     def verify(self, isWrong=True):
         flag = True
         for i in range(1, len(self.blocks)):
-            #count = 0
-            #for k in range(1, len(self.blocks)):  # check if two block have same parent
-               # if self.blocks[i].parent == self.blocks[k].parent:
-               #     count = count + 1
-            #if count > 1:
-            #    print("Transactions in blockchain: ", len(self.blocks))
-            #    print("State of blockchain: ERROR")
-            #    print("Bad block: ", i)
-            #    print("Two blocks found with the same parent")
-
-            #if self.blocks[i - 1].blockNumber != i - 1:  # check correct parent block number
-            #    flag = False
-            #    if isWrong:
-            #        print("Transactions in blockchain: ", len(self.blocks))
-            #        print("State of blockchain: ERROR")
-            #        print("Bad block: ", i)
-            #        print("Parent block: NOT FOUND")
-
-            if self.blocks[i - 1].hash != self.blocks[i].prevHash:  # check that previous and current hash match
+            if hashing(self.blocks[i - 1]) != self.blocks[i].prevHash:  # check that previous and current hash match
                 flag = False
-                print(binascii.hexlify(self.blocks[i - 1].hash) , binascii.hexlify(self.blocks[i].prevHash))
+                print(binascii.hexlify(hashing(self.blocks[i - 1])) , binascii.hexlify(self.blocks[i].prevHash))
                 if isWrong:
                     print("Transactions in blockchain: ", len(self.blocks))
                     print("State of blockchain: ERROR")

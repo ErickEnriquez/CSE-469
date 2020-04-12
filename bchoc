@@ -13,7 +13,15 @@ import datetime
 
 
 
+
+
 os.environ['BCHOC_FILE_PATH'] = 'data.bin' #THIS IS HERE FOR TESTING, NEEDS TO BE COMMENTED OUT WHEN SUBMITTING
+
+#with open(os.environ['BCHOC_FILE_PATH'], 'rb') as fp:
+#    while True:
+#        data = fp.read(68)
+#        if not data:
+#            print(data)
 
 
 
@@ -72,14 +80,17 @@ elif sys.argv[1] == 'verify':
     # verify code here
     print("Parse the blockchain and validate all entries.")
     done = False
-    with open('data.bin','rb') as fp:
+    with open(os.environ['BCHOC_FILE_PATH'],'rb') as fp:
+
         while True:
             data_bytes = fp.read(68) # read the file to get bytes
-            if not data_bytes:
+            print(data_bytes , '\nlength is ', len(data_bytes))
+            if len(data_bytes) == 1:
                 break
-            block = unpack(data_bytes) # unpack the bytes
-            block.data = fp.read(block.dataLength) # read the amount of blocks of data we have
-            bc.fill_list(block)
+            else:
+                block = unpack(data_bytes) # unpack the bytes
+                block.data = fp.read(block.dataLength) # read the amount of blocks of data we have
+                bc.fill_list(block)
     bc.verify()
             
 
@@ -102,10 +113,10 @@ elif sys.argv[1] == 'add':
         sys.exit('PLEASE SUPPLY CASE ID')
     elif args.i is None:
         sys.exit('PLEASE SUPPLY A EVIDENCE ID')
-    print(args.i)
     #--------------------------------------------------------------------
     result =  check_if_initial_block(os.environ['BCHOC_FILE_PATH'], bc)
     #--------------------------------------------------------------------
+    print(result)
     if result == True: # if we have an initial blockchain already then load it into the data structure
         with open(os.environ['BCHOC_FILE_PATH'], 'rb') as fp:
            while True:
