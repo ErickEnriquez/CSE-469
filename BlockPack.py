@@ -37,16 +37,17 @@ block_head_struct = struct.Struct(block_head_fmt)
 #======================================================================
 def pack_block(Block):
     stamp = datetime.timestamp(Block.timestamp) #create a timestamp
-
-    block_bytes = block_head_struct.pack(
-        Block.prevHash,
-        stamp,
-        Block.caseID.bytes_le,
-        Block.evidenceID,
-        Block.state,
-        Block.dataLength
-        
-    )
+    try:
+        block_bytes = block_head_struct.pack(
+            Block.prevHash,
+            stamp,
+            Block.caseID.bytes_le,
+            Block.evidenceID,
+            Block.state,
+            Block.dataLength
+        )
+    except struct.error:
+        sys.exit('ERROR PACKING BLOCK')
     return block_bytes
 
 def pack_inital_block(Block):
@@ -58,8 +59,22 @@ def pack_inital_block(Block):
         Block.state,
         Block.dataLength,
     )
-    
     return block_bytes
+
+def pack_odd_block(Block):
+    stamp = datetime.timestamp(Block.timestamp) #create a timestamp
+    try:
+        block_bytes = block_head_struct.pack(
+            bytes(Block.prevHash),
+            stamp,
+            Block.caseID.bytes_le,
+            Block.evidenceID,
+            Block.state,
+            Block.dataLength
+        )
+    except struct.error:
+        sys.exit('ERROR PACKING BLOCK')
+    return block_bytes,
 
 ##########################################################################
 # Unpacking structure and returning a block object

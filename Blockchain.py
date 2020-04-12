@@ -39,7 +39,18 @@ class Blockchain():
         if exist == 1:
             sys.exit("This item had already been checkedin (already exist)")
         else:
-            self.blocks.append(Block.Block(
+            if len(self.blocks) == 1:
+                self.blocks.append(Block.Block(
+                   0,
+                   datetime.now(),
+                   UUID(case),
+                   item,
+                   STATE['in'],
+                   0 
+                ))
+            else:
+                self.blocks.append(Block.Block(
+                                    
                                     hashing(self.blocks[len(self.blocks) - 1]), #prev hash
                                     datetime.now(),             #timestamp
                                     UUID(case),                                   #caseID
@@ -51,7 +62,7 @@ class Blockchain():
             print('Checked out item: ', self.blocks[len(self.blocks) - 1].evidenceID)
             print('Status: ', self.blocks[len(self.blocks) - 1].state.decode('utf-8'))
             print('Time of action: ', self.blocks[len(self.blocks) - 1].timestamp.isoformat())
-            print('previous hash')
+            print('previous hash: ' , self.blocks[len(self.blocks)-1].prevHash)
 
     # Get the number of block in the chain
     def size(self):

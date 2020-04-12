@@ -6,7 +6,7 @@ import sys
 import os.path
 import Block
 from Block import printBlock
-from BlockPack import pack_block,unpack, pack_inital_block #functions I created to pack and unpack a block
+from BlockPack import pack_block,unpack, pack_inital_block , pack_odd_block #functions I created to pack and unpack a block
 from Blockchain import Blockchain
 import datetime
 
@@ -34,19 +34,6 @@ def check_if_initial_block(file_path , bc):
 
 ###############################################################
 
-
-
-#def add_initial_block(bc):
-#    initial_block = Block.create_initial_block() # create initial block
-#    block_bytes= pack_inital_block(initial_block) #pack the inital block into bytes
-#    with open(os.environ['BCHOC_FILE_PATH'],'wb') as fp:   #open a file to store block
-#        fp.write(block_bytes)#write the initial block to binary file
-#        fp.write(initial_block.data) # write the block data to file (make sure the string is in bytes)
-#    print('Blockchain file not found. Created INITIAL block.')
-#    bc.blocks.append(initial_block)
-        
-
-###################################################################
 
 bc = Blockchain()   #initialize the blockchain
 
@@ -129,11 +116,12 @@ elif sys.argv[1] == 'add':
         bc.add(args.c,args.i[j])
     with open(os.environ['BCHOC_FILE_PATH'],'ab') as fp:
          for i in range (1,len(bc.blocks)):
-            block_bytes= pack_block(bc.blocks[i])
-            fp.write(block_bytes)
-            fp.write(bc.blocks[i].data.encode('utf-8'))
-    for i in range(0,len(bc.blocks)):
-        printBlock(bc.blocks[i])
+            if i == 1 : 
+                block_bytes = pack_odd_block(bc.blocks[i])
+            else:
+                block_bytes= pack_block(bc.blocks[i])
+                fp.write(block_bytes)
+                fp.write(bc.blocks[i].data.encode('utf-8'))
 
 #=======================================================================================================================================================
 
