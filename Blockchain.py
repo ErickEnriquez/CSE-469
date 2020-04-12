@@ -51,6 +51,7 @@ class Blockchain():
             print('Checked out item: ', self.blocks[len(self.blocks) - 1].evidenceID)
             print('Status: ', self.blocks[len(self.blocks) - 1].state.decode('utf-8'))
             print('Time of action: ', self.blocks[len(self.blocks) - 1].timestamp.isoformat())
+            print('previous hash')
 
     # Get the number of block in the chain
     def size(self):

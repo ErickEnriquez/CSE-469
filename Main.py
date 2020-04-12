@@ -65,7 +65,7 @@ if sys.argv[1] == "init":
         sys.exit('Invalid Parameters')
     if os.path.exists(os.environ['BCHOC_FILE_PATH']) == False:# if file doesn't exist
         initial_block = Block.create_initial_block() # create initial block
-        printBlock(initial_block)
+        #printBlock(initial_block)
         block_bytes= pack_inital_block(initial_block) #pack the inital block into bytes
         with open(os.environ['BCHOC_FILE_PATH'],'wb') as fp:   #open a file to store block
             fp.write(block_bytes)#write the initial block to binary file
@@ -132,6 +132,8 @@ elif sys.argv[1] == 'add':
             block_bytes= pack_block(bc.blocks[i])
             fp.write(block_bytes)
             fp.write(bc.blocks[i].data.encode('utf-8'))
+    for i in range(0,len(bc.blocks)):
+        printBlock(bc.blocks[i])
 
 #=======================================================================================================================================================
 
