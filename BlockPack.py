@@ -36,13 +36,17 @@ block_head_struct = struct.Struct(block_head_fmt)
 # packing the structure
 #======================================================================
 def pack_block(Block):
-    stamp = datetime.timestamp(Block.timestamp) #create a timestamp
-    case = Block.caseID.bytes
-    temp = bytearray(case)
-    temp.reverse()
+    if Block.timestamp == 0:
+        stamp = 0
+    else:
+        stamp = datetime.timestamp(Block.timestamp) #create a timestamp
+    case = Block.caseID.bytes #turn the UUID into big endian bytes
+    temp = bytearray(case)  #turn the bytes into a byte array
+    temp.reverse()  #reverse the bytes to be in little endian ordering
+    print('type ' , type(Block.prevHash))
     try:
         block_bytes = block_head_struct.pack(
-            Block.prevHash.encode(),#assuming this is a string
+            bytes(Block.prevHash,encoding='utf-8'),#assuming this is a string
             stamp,
             temp,
             Block.evidenceID,
@@ -75,13 +79,13 @@ def unpack(block_bytes):
         block_contents[4],
         block_contents[5]
     )
-    print('PREV HASH:' , newBlock.prevHash)
-    print('TIMESTAMP: ' , newBlock.timestamp)
-    print('CASE ID: ',newBlock.caseID)
-    print('EVIDENCE ID: ', newBlock.evidenceID)
-    print('STATE: ' , newBlock.state)
-    print('DATALENGTH: ', newBlock.dataLength)
-    print('\n\n')
+    #print('PREV HASH:' , newBlock.prevHash)
+    #print('TIMESTAMP: ' , newBlock.timestamp)
+    #print('CASE ID: ',newBlock.caseID)
+    #print('EVIDENCE ID: ', newBlock.evidenceID)
+    #print('STATE: ' , newBlock.state)
+    #print('DATALENGTH: ', newBlock.dataLength)
+    #print('\n\n')
     return newBlock
 
 

@@ -116,6 +116,7 @@ elif sys.argv[1] == 'add':
                    break
                else:
                 temp_block = unpack(block_bytes)
+                print(temp_block.dataLength)
                 temp_block.data = fp.read(temp_block.dataLength)
                 bc.blocks.append(temp_block)
     sizebefore = len(bc.blocks)#store the length of the blockchain from before so we only append the new items
@@ -124,7 +125,7 @@ elif sys.argv[1] == 'add':
     with open(os.environ['BCHOC_FILE_PATH'],'ab') as fp:
          for i in range (sizebefore,len(bc.blocks)):
             block_bytes= pack_block(bc.blocks[i])
-            print(block_bytes)
+            #print(block_bytes)
             fp.write(block_bytes)
             fp.write(bc.blocks[i].data.encode('utf-8'))
 
