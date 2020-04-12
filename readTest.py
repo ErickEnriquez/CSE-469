@@ -16,7 +16,7 @@ with open('data.bin' ,'rb') as fp:
         block.dataLength = fp.read(block.dataLength)
         print('PREV HASH:' , block.prevHash)
         print('TIMESTAMP: ' , block.timestamp)
-        print(block.caseID.decode('hex'))
+        print(block.caseID)
         print('CASE ID: ',  block.caseID , ' EXPECTED ' , 'fce7da5c-4994-45db-9440-0b872895db01' )
         print('EVIDENCE ID: ', block.evidenceID)
         print('STATE: ' , block.state)

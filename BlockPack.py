@@ -67,11 +67,8 @@ def pack_inital_block(Block):
 def pack_odd_block(Block):
     stamp = datetime.timestamp(Block.timestamp) #create a timestamp
     case = Block.caseID.bytes
-    print('BYTES BIG ENDIAN ', case)
     temp = bytearray(case)
     temp.reverse()
-    print('BYTES LITTLE ENDIAN', Block.caseID.bytes_le)
-    print( ' BYTES ARE USING REVERSE ',temp ,  ' OUR BLOCK HAS UUID ', Block.caseID , ' ', type(Block.caseID))
     block_bytes = block_head_struct.pack(
         bytes(Block.prevHash),
         stamp,

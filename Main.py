@@ -98,7 +98,8 @@ elif sys.argv[1] == 'add':
     # makes a list of the remaining numbers
     parser.add_argument('-i', nargs=argparse.REMAINDER, help="Specifies the evidence item’s identifier. When used with log only blocks with the given item_id are returned. The item_ID must be unique within the blockchain. This means you cannot re-add an evidence item once the remove action has been performed on it.")
     args = parser.parse_args(arguments)
-    
+    if args.c is None:
+        sys.exit('PLEASE SUPPLE CASE ID')
     #--------------------------------------------------------------------
     result =  check_if_initial_block(os.environ['BCHOC_FILE_PATH'], bc)
     #--------------------------------------------------------------------
