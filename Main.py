@@ -11,7 +11,7 @@ from Blockchain import Blockchain
 import datetime
 
 
-with open(os.environ['BCHOC_FILE_PATH']) as fp:
+with open(os.environ['BCHOC_FILE_PATH'], 'rb') as fp:
     while True:
         data = fp.read(68)
         if not data:
