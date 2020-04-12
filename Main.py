@@ -117,8 +117,17 @@ elif sys.argv[1] == 'add':
     args = parser.parse_args(arguments)
     
     #--------------------------------------------------------------------
-    check_if_initial_block(os.environ['BCHOC_FILE_PATH'], bc)
+    result =  check_if_initial_block(os.environ['BCHOC_FILE_PATH'], bc)
     #--------------------------------------------------------------------
+    if result == True: # if we have an initial blockchain already then load it into the data structure
+        with open(os.environ['BCHOC_FILE_PATH'], 'rb') as fp:
+           while True:
+               block_bytes = fp.read(68)
+               if not block_bytes:
+                   break
+               temp_block = unpack(block_bytes)
+               temp_block.data = fp.read(temp_block.dataLength)
+               bc.blocks.append(temp_block)
 
     for j in range(0,len(args.i)):
         bc.add(args.c,args.i[j])
