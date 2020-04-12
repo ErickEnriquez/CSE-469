@@ -40,9 +40,10 @@ def pack_block(Block):
     case = Block.caseID.bytes
     temp = bytearray(case)
     temp.reverse()
+   
     try:
         block_bytes = block_head_struct.pack(
-            Block.prevHash,
+            Block.prevHash.encode(),
             stamp,
             temp,
             Block.evidenceID,
@@ -53,31 +54,7 @@ def pack_block(Block):
         sys.exit('ERROR PACKING BLOCK')
     return block_bytes
 
-def pack_inital_block(Block):
-    block_bytes = block_head_struct.pack(
-        bytes(Block.prevHash),
-        Block.timestamp,
-        Block.caseID.to_bytes(16,'little'),
-        Block.evidenceID,
-        Block.state,
-        Block.dataLength,
-    )
-    return block_bytes
 
-def pack_odd_block(Block):
-    stamp = datetime.timestamp(Block.timestamp) #create a timestamp
-    case = Block.caseID.bytes
-    temp = bytearray(case)
-    temp.reverse()
-    block_bytes = block_head_struct.pack(
-        bytes(Block.prevHash),
-        stamp,
-        temp,
-        Block.evidenceID,
-        Block.state,
-        Block.dataLength
-        )
-    return block_bytes
 
 ##########################################################################
 # Unpacking structure and returning a block object
@@ -86,40 +63,26 @@ def pack_odd_block(Block):
 def unpack(block_bytes):
     try:
         block_contents = block_head_struct.unpack(block_bytes)
+        temp = bytearray(block_contents[2])
+        temp.reverse()
+        temp = bytes(temp)
     except struct.error:
         sys.exit('ERROR UNPACKING BLOCK')
     newBlock = Block.Block(
         block_contents[0],
         block_contents[1],
-        UUID(bytes=block_contents[2]),
+        UUID(bytes=temp),
         block_contents[3],
         block_contents[4],
         block_contents[5]
     )
+    print('PREV HASH:' , newBlock.prevHash)
+    print('TIMESTAMP: ' , newBlock.timestamp)
+    print('CASE ID: ',newBlock.caseID)
+    print('EVIDENCE ID: ', newBlock.evidenceID)
+    print('STATE: ' , newBlock.state)
+    print('DATALENGTH: ', newBlock.dataLength)
+    print('\n\n')
     return newBlock
 
-
-
-
-
-
-
-
-
-
-#======================================================================
-# Unpacking the block structure
-#======================================================================
-#fp = open('data.bin','rb')
-#block = fp.read(68)
-#blockContents = block_head_struct.unpack(block)
-#timestamp = datetime.fromtimestamp(blockContents[1])
-#datalen = blockContents[5]
-#data = fp.read(datalen)
-#data = data.decode('utf-8')
-#print(data)
-#print(timestamp)
-#print(blockContents)
-
-#fp.close()
 

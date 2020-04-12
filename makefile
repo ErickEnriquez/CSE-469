@@ -21,5 +21,8 @@ checkout_test:
 add_one_test:
 	./bchoc add -c fce7da5c-4994-45db-9440-0b872895db01 -i 3537722555
 
+add_1_more:
+	./bchoc add -c fce7da5c-4994-45db-9440-0b872895db01 -i 3537722545
+
 add_many_test:
 	./bchoc add -c 954a9eb9-f7db-442a-a08c-e5826584543d -i 1547161094 -i 2630006027 -i 1036897748 -i 2897527353 -i 3953455618 -i 3412673101 -i 3235388174

@@ -34,14 +34,14 @@ class Blockchain():
     def add(self, case, item):
         exist = 0
         for j in range(0, len(self.blocks)):
-            if self.blocks[j].evidenceID == item:
+            if str(self.blocks[j].evidenceID) == item:
                 exist = 1
         if exist == 1:
-            sys.exit("This item had already been checkedin (already exist)")
+            sys.exit("This item already exists in the blockchain")
         else:
             if len(self.blocks) == 1:
                 self.blocks.append(Block.Block(
-                   0,
+                   str(0),
                    datetime.now(),
                    UUID(case),
                    item,
@@ -49,9 +49,9 @@ class Blockchain():
                    0 
                 ))
             else:
+                print('APPENDING AFTER 2nd')
                 self.blocks.append(Block.Block(
-                                    
-                                    hashing(self.blocks[len(self.blocks) - 1]), #prev hash
+                                    str(hashing(self.blocks[len(self.blocks) - 1])), #prev hash
                                     datetime.now(),                             #timestamp
                                     UUID(case),                                   #caseID
                                     item,                                   #evidence id
@@ -59,10 +59,10 @@ class Blockchain():
                                     0                                      #datalength
                                      ))
             print('Case: ', self.blocks[len(self.blocks) - 1].caseID)
-            print('Checked out item: ', self.blocks[len(self.blocks) - 1].evidenceID)
+            print('item ID: ', self.blocks[len(self.blocks) - 1].evidenceID)
             print('Status: ', self.blocks[len(self.blocks) - 1].state.decode('utf-8'))
             print('Time of action: ', self.blocks[len(self.blocks) - 1].timestamp.isoformat())
-            print('previous hash: ' , self.blocks[len(self.blocks)-1].prevHash)
+            print('previous hash: ' , self.blocks[len(self.blocks)-1].prevHash , " TYPE: ", type(self.blocks[len(self.blocks)-1].prevHash) ,len(self.blocks[len(self.blocks)-1].prevHash))
 
     # Get the number of block in the chain
     def size(self):
@@ -188,7 +188,9 @@ class Blockchain():
     def verify(self, isWrong=True):
         flag = True
         for i in range(1, len(self.blocks)):
-            if hashing(self.blocks[i - 1]) != self.blocks[i].prevHash:  # check that previous and current hash match
+            if i == 1:#
+                print('initial Block')
+            elif hashing(self.blocks[i - 1]) != self.blocks[i].prevHash:  # check that previous and current hash match
                 flag = False
                 print(binascii.hexlify(hashing(self.blocks[i - 1])) , binascii.hexlify(self.blocks[i].prevHash))
                 if isWrong:
