@@ -15,13 +15,8 @@ import datetime
 
 
 
-os.environ['BCHOC_FILE_PATH'] = 'data.bin' #THIS IS HERE FOR TESTING, NEEDS TO BE COMMENTED OUT WHEN SUBMITTING
+#os.environ['BCHOC_FILE_PATH'] = 'data.bin' #THIS IS HERE FOR TESTING, NEEDS TO BE COMMENTED OUT WHEN SUBMITTING
 
-#with open(os.environ['BCHOC_FILE_PATH'], 'rb') as fp:
-#    while True:
-#        data = fp.read(68)
-#        if not data:
-#            print(data)
 
 
 
