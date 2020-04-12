@@ -84,7 +84,10 @@ def pack_odd_block(Block):
 ##########################################################################
 
 def unpack(block_bytes):
-    block_contents = block_head_struct.unpack(block_bytes)
+    try:
+        block_contents = block_head_struct.unpack(block_bytes)
+    except struct.error:
+        sys.exit('ERROR UNPACKING BLOCK')
     newBlock = Block.Block(
         block_contents[0],
         block_contents[1],
