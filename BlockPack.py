@@ -39,7 +39,7 @@ def pack_block(Block):
     stamp = datetime.timestamp(Block.timestamp) #create a timestamp
     case = Block.caseID.bytes
     temp = bytearray(case)
-    print( ' BYTES ARE ',temp)
+    temp.reverse()
     try:
         block_bytes = block_head_struct.pack(
             Block.prevHash,
