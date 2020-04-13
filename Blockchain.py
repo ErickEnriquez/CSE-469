@@ -48,11 +48,6 @@ class Blockchain():
                    STATE['in'],
                    0 
                 ))
-                print('Case: ', self.blocks[len(self.blocks) - 1].caseID)
-                print('item ID: ', self.blocks[len(self.blocks) - 1].evidenceID)
-                print('Status: ', self.blocks[len(self.blocks) - 1].state.decode('utf-8'))
-                print('Time of action: ', self.blocks[len(self.blocks) - 1].timestamp.isoformat())
-                print('previous hash: ' , self.blocks[len(self.blocks)-1].prevHash , " TYPE: ", type(self.blocks[len(self.blocks)-1].prevHash) ,len(self.blocks[len(self.blocks)-1].prevHash))
             else:
                 self.blocks.append(Block.Block(
                                     str(hashing(self.blocks[len(self.blocks) - 1])), #prev hash
