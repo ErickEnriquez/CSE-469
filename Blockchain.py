@@ -54,7 +54,6 @@ class Blockchain():
                 print('Time of action: ', self.blocks[len(self.blocks) - 1].timestamp.isoformat())
                 print('previous hash: ' , self.blocks[len(self.blocks)-1].prevHash , " TYPE: ", type(self.blocks[len(self.blocks)-1].prevHash) ,len(self.blocks[len(self.blocks)-1].prevHash))
             else:
-                print('APPENDING AFTER 2nd')
                 self.blocks.append(Block.Block(
                                     str(hashing(self.blocks[len(self.blocks) - 1])), #prev hash
                                     datetime.now(),                             #timestamp
@@ -72,10 +71,6 @@ class Blockchain():
     # Get the number of block in the chain
     def size(self):
         return len(self.blocks)
-
-    #Take a block object and add it to the list
-    def fill_list(self, block) :
-        self.blocks.append(block)
 
 
     # This function count the number of entries for a given item in the blockchain
@@ -193,24 +188,16 @@ class Blockchain():
     def verify(self, isWrong=True):
         flag = True
         for i in range(1, len(self.blocks)):
-            if i == 1:#
+            if i == 1 or i==2:#
                 print('initial Block')
             elif hashing(self.blocks[i - 1]) != self.blocks[i].prevHash:  # check that previous and current hash match
                 flag = False
-                print(binascii.hexlify(hashing(self.blocks[i - 1])) , binascii.hexlify(self.blocks[i].prevHash))
+               # print(binascii.hexlify(hashing(self.blocks[i - 1])) , binascii.hexlify(self.blocks[i].prevHash))
                 if isWrong:
                     print("Transactions in blockchain: ", len(self.blocks))
                     print("State of blockchain: ERROR")
                     print("Bad block: ", i)
                     sys.exit("Block contents do not block checksum")
-            #elif self.blocks[i].hash != self.blocks[i].hashing():  # Check if correct hash value were saved
-            #    flag = False
-            #    if isWrong:
-            #        print("Transactions in blockchain: ", len(self.blocks))
-            #        print("State of blockchain: ERROR")
-            #        print("Bad block: ", i)
-            #        print('Wrong hash at block number: ', i)
-
             elif self.blocks[i - 1].timestamp >= self.blocks[
                 i].timestamp:  # Check if block time were registered accordinaly
                 flag = False
