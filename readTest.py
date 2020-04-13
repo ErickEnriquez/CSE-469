@@ -16,11 +16,13 @@ with open('data.bin' ,'rb') as fp:
             break
         else:
             block  = unpack(bytes_data)
-            block.dataLength = fp.read(block.dataLength)
+            block.data = fp.read(block.dataLength).decode('utf-8')
+            print('\n\n')
             print("Previous hash: ", block.prevHash)
             print("Timestamp: ", datetime.datetime.fromtimestamp(block.timestamp))
             print('Case ID: ', block.caseID)
-            print('Evidence ID: ')
+            print('Evidence ID: ', block.evidenceID)
             print('State: ', block.state)
             print('Data length: ', block.dataLength)
             print('Data: ', block.data)
+            print('\n\n')

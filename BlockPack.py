@@ -43,7 +43,6 @@ def pack_block(Block):
     case = Block.caseID.bytes #turn the UUID into big endian bytes
     temp = bytearray(case)  #turn the bytes into a byte array
     temp.reverse()  #reverse the bytes to be in little endian ordering
-    print('type ' , type(Block.prevHash))
     try:
         block_bytes = block_head_struct.pack(
             bytes(Block.prevHash,encoding='utf-8'),#assuming this is a string
@@ -55,6 +54,13 @@ def pack_block(Block):
         )
     except struct.error:
         sys.exit('ERROR PACKING BLOCK')
+    #print('PREV HASH ', block_bytes[0:20],
+    #        '\nTimestamp ' , block_bytes[24:32],
+    #        '\nCASE ID ' ,block_bytes[32:48],
+    #        '\nEVIDENCE ID ' , block_bytes[48:52],
+    #        '\nSTATE ', block_bytes[52:63],
+    #        '\nDATA LENGTH ', block_bytes[64:68]
+    #        )
     return block_bytes
 
 
@@ -64,11 +70,14 @@ def pack_block(Block):
 ##########################################################################
 
 def unpack(block_bytes):
+  
     try:
         block_contents = block_head_struct.unpack(block_bytes)
+        #print(block_contents)
         temp = bytearray(block_contents[2])
         temp.reverse()
         temp = bytes(temp)
+        #print('BLOCK DATA LENGTH ' , block_contents[5], type(block_contents[5]) )
     except struct.error:
         sys.exit('ERROR UNPACKING BLOCK')
     newBlock = Block.Block(
@@ -77,15 +86,9 @@ def unpack(block_bytes):
         UUID(bytes=temp),
         block_contents[3],
         block_contents[4],
-        block_contents[5]
+        block_contents[5],
     )
-    #print('PREV HASH:' , newBlock.prevHash)
-    #print('TIMESTAMP: ' , newBlock.timestamp)
-    #print('CASE ID: ',newBlock.caseID)
-    #print('EVIDENCE ID: ', newBlock.evidenceID)
-    #print('STATE: ' , newBlock.state)
-    #print('DATALENGTH: ', newBlock.dataLength)
-    #print('\n\n')
+    
     return newBlock
 
 

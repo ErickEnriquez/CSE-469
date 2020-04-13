@@ -56,8 +56,7 @@ class Blockchain():
             else:
                 print('APPENDING AFTER 2nd')
                 self.blocks.append(Block.Block(
-                                    #str(hashing(self.blocks[len(self.blocks) - 1])), #prev hash
-                                    str(0),
+                                    str(hashing(self.blocks[len(self.blocks) - 1])), #prev hash
                                     datetime.now(),                             #timestamp
                                     UUID(case),                                   #caseID
                                     item,                                   #evidence id

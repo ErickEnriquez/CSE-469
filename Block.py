@@ -14,14 +14,14 @@ class Block():
 
     # init method or constructor of the block class
 
-    def __init__(self ,prevHash, timestamp, caseID, evidenceID, state, dataLength, data='0'):#default value for data
-        self.timestamp = timestamp
-        self.state = state
-        self.caseID = caseID
-        self.data = data
-        self.dataLength = int(dataLength)
+    def __init__(self ,prevHash, timestamp, caseID, evidenceID, state, dataLength ):#default value for data
         self.prevHash = prevHash
+        self.timestamp = timestamp
+        self.caseID = caseID
+        self.state = state
         self.evidenceID = int(evidenceID)
+        self.dataLength = int(dataLength)
+        self.data = b''
 
 
     
@@ -30,7 +30,7 @@ class Block():
 def hashing(Block):
     key = hashlib.sha1()        #hash using the SHA-1 algorithm
     key.update(str(Block.prevHash).encode('utf-8'))
-    #key.update(str(Block.timestamp).encode('utf-8'))
+    key.update(str(Block.timestamp).encode('utf-8'))
     key.update(str(Block.caseID).encode('utf-8'))
     key.update(str(Block.evidenceID).encode('utf-8'))
     key.update(str(Block.dataLength).encode('utf-8'))
@@ -49,20 +49,20 @@ def create_initial_block():
         0,  # 04 bytes : evidenceId
         b"INITIAL\0\0\0\0", # 11 bytes : state
         14, # 04 bytes : data_length
-        b"Initial block\0" # varies bytes : data
         )
+    initial_block.data = b"Initial block\0" # varies bytes : data
     return initial_block
 
 #untility function to print the block
 def printBlock(Block):
     print('\n')
     print(
-    Block.prevHash, 
-    Block.timestamp,
-    UUID(bytes=Block.caseID),
-    Block.evidenceID,
-    Block.state,
-    Block.dataLength,
+    Block.prevHash, '\n' , 
+    Block.timestamp, '\n' ,
+    Block.caseID, '\n' ,
+    Block.evidenceID, '\n' ,
+    Block.state, '\n' ,
+    Block.dataLength, '\n' ,
     Block.data )
     print('\n\n')
 

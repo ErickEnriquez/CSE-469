@@ -15,7 +15,7 @@ import datetime
 
 
 
-#os.environ['BCHOC_FILE_PATH'] = 'data.bin' #THIS IS HERE FOR TESTING, NEEDS TO BE COMMENTED OUT WHEN SUBMITTING
+os.environ['BCHOC_FILE_PATH'] = 'data.bin' #THIS IS HERE FOR TESTING, NEEDS TO BE COMMENTED OUT WHEN SUBMITTING
 
 
 
@@ -55,7 +55,7 @@ if sys.argv[1] == "init":
         sys.exit('Invalid Parameters')
     if os.path.exists(os.environ['BCHOC_FILE_PATH']) == False:# if file doesn't exist
         initial_block = Block.create_initial_block() # create initial block
-        #printBlock(initial_block)
+        printBlock(initial_block)
         block_bytes= pack_block(initial_block) #pack the inital block into bytes
         with open(os.environ['BCHOC_FILE_PATH'],'wb') as fp:   #open a file to store block
             fp.write(block_bytes)#write the initial block to binary file
@@ -82,7 +82,7 @@ elif sys.argv[1] == 'verify':
             else:
                 block = unpack(data_bytes) # unpack the bytes
                 block.data = fp.read(block.dataLength) # read the amount of blocks of data we have
-                bc.fill_list(block)
+                bc.blocks.append(block)
     bc.verify()
             
 
@@ -120,6 +120,7 @@ elif sys.argv[1] == 'add':
                 temp_block.data = fp.read(temp_block.dataLength)
                 bc.blocks.append(temp_block)
     sizebefore = len(bc.blocks)#store the length of the blockchain from before so we only append the new items
+    
     for j in range(0,len(args.i)):
         bc.add(args.c,args.i[j][0])
     with open(os.environ['BCHOC_FILE_PATH'],'ab') as fp:
@@ -127,7 +128,7 @@ elif sys.argv[1] == 'add':
             block_bytes= pack_block(bc.blocks[i])
             #print(block_bytes)
             fp.write(block_bytes)
-            fp.write(bc.blocks[i].data.encode('utf-8'))
+            fp.write(bc.blocks[i].data)
 
 #=======================================================================================================================================================
 
