@@ -11,4 +11,4 @@ make add_1_more
 
 make add_one_test
 
-./readTest.py
+make verify_test

@@ -76,15 +76,15 @@ elif sys.argv[1] == 'verify':
     with open(os.environ['BCHOC_FILE_PATH'],'rb') as fp:
         while True:
             data_bytes = fp.read(68) # read the file to get bytes
-            print(
-            '\nPREVHASH ',data_bytes[0:20] ,
-            '\nTIMESTAMP',data_bytes[24:32],
-            '\nCASEID',data_bytes[32:48],
-            data_bytes[48:52],
-            data_bytes[52:63],
-            data_bytes[64:63]
-             , '\nlength is ',
-              len(data_bytes))
+            #print(
+            #'\nPREVHASH ',data_bytes[0:20] ,
+            #'\nTIMESTAMP',data_bytes[24:32],
+            #'\nCASEID',data_bytes[32:48],
+            #data_bytes[48:52],
+            #data_bytes[52:63],
+            #data_bytes[64:63]
+            # , '\nlength is ',
+            #  len(data_bytes))
             if len(data_bytes) == 1 or len(data_bytes) == 0:
                 break
             else:
@@ -99,6 +99,7 @@ elif sys.argv[1] == 'verify':
                 print('Data: ', block.data)
                 block.data = fp.read(block.dataLength) # read the amount of blocks of data we have
                 print('BLOCK DATA : ' , block.data,'\n\n')
+                bc.blocks.append(block)
     bc.verify()
             
 
