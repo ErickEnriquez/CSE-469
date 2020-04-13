@@ -17,10 +17,14 @@ import datetime
 
 os.environ['BCHOC_FILE_PATH'] = 'data.bin' #THIS IS HERE FOR TESTING, NEEDS TO BE COMMENTED OUT WHEN SUBMITTING
 
+bc = Blockchain()   #initialize the blockchain
+
+arguments = sys.argv[1:]  # grab everything in list except executable name
 
 
+parser = argparse.ArgumentParser()  # parser object
 
-###############################################################
+############################################################################################################
 #checks if the inital block exists, if not it creates inital block and returns false
 def check_if_initial_block(file_path , bc):
     if os.path.exists(os.environ['BCHOC_FILE_PATH']):
@@ -35,15 +39,29 @@ def check_if_initial_block(file_path , bc):
         bc.blocks.append(initial_block)
         return False
 
-###############################################################
+##############################################################################################################
 
 
-bc = Blockchain()   #initialize the blockchain
-
-arguments = sys.argv[1:]  # grab everything in list except executable name
-
-
-parser = argparse.ArgumentParser()  # parser object
+def build_blockchain_from_file(bc):
+    with open(os.environ['BCHOC_FILE_PATH'] ,'rb') as fp:
+        while True:
+            bytes_data =  fp.read(68)
+            if  len(bytes_data) is not 68:
+                break
+            else:
+                block  = unpack(bytes_data)
+                block.data = fp.read(block.dataLength).decode('utf-8')
+                print('\n\n')
+                print("Previous hash: ", block.prevHash)
+                print("Timestamp: ", datetime.datetime.fromtimestamp(block.timestamp))
+                print('Case ID: ', block.caseID)
+                print('Evidence ID: ', block.evidenceID)
+                print('State: ', block.state)
+                print('Data length: ', block.dataLength)
+                print('Data: ', block.data)
+                print('\n\n')
+                bc.blocks.append(block)
+    return bc
 
 #=======================================================================================================================================================
 
@@ -55,7 +73,7 @@ if sys.argv[1] == "init":
         sys.exit('Invalid Parameters')
     if os.path.exists(os.environ['BCHOC_FILE_PATH']) == False:# if file doesn't exist
         initial_block = Block.create_initial_block() # create initial block
-        #printBlock(initial_block)
+        printBlock(initial_block)
         block_bytes= pack_block(initial_block) #pack the inital block into bytes
         with open(os.environ['BCHOC_FILE_PATH'],'wb') as fp:   #open a file to store block
             fp.write(block_bytes)#write the initial block to binary file
@@ -73,24 +91,8 @@ if sys.argv[1] == "init":
 #=======================================================================================================================================================
 elif sys.argv[1] == 'verify':
     # verify code here
-    with open(os.environ['BCHOC_FILE_PATH'],'rb') as fp:
-        while True:
-            data_bytes = fp.read(68) # read the file to get bytes
-           # print(data_bytes , '\nlength is ', len(data_bytes))
-            if len(data_bytes) == 1 or len(data_bytes) == 0:
-                break
-            else:
-                block = unpack(data_bytes) # unpack the bytes
-                block.data = fp.read(block.dataLength) # read the amount of blocks of data we have
-                bc.fill_list(block)
+    bc  = build_blockchain_from_file(bc)
     bc.verify()
-            
-
-
-
-
-
-
 #=======================================================================================================================================================
 
 
@@ -120,6 +122,7 @@ elif sys.argv[1] == 'add':
                 temp_block.data = fp.read(temp_block.dataLength)
                 bc.blocks.append(temp_block)
     sizebefore = len(bc.blocks)#store the length of the blockchain from before so we only append the new items
+    
     for j in range(0,len(args.i)):
         bc.add(args.c,args.i[j][0])
     with open(os.environ['BCHOC_FILE_PATH'],'ab') as fp:
@@ -127,7 +130,7 @@ elif sys.argv[1] == 'add':
             block_bytes= pack_block(bc.blocks[i])
             #print(block_bytes)
             fp.write(block_bytes)
-            fp.write(bc.blocks[i].data.encode('utf-8'))
+            fp.write(bc.blocks[i].data)
 
 #=======================================================================================================================================================
 
@@ -137,7 +140,9 @@ elif sys.argv[1] == 'checkin':
         'checkin', help="Add a new checkin entry to the chain of custody for the given evidence item. Checkin actions may only be performed on evidence items that have already been added to the blockchain.")
     parser.add_argument('-i', help="Specifies the evidence item’s identifier. When used with log only blocks with the given item_id are returned. The item ID must be unique within the blockchain. This means you cannot re-add an evidence item once the remove action has been performed on it.")
     args = parser.parse_args(arguments)
-    print(args.i)  # args.i holds the value of the itme ID
+    bc = build_blockchain_from_file(bc) # build the blockchain file
+    print(len(bc.blocks))
+    
 
 #=======================================================================================================================================================
 

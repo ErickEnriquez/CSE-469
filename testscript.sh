@@ -7,6 +7,8 @@ make
 
 make init_test
 
+make add_1_more
+
 make add_one_test
 
-make add_1_more
+make verify_test
