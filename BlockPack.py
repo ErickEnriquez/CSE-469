@@ -54,13 +54,6 @@ def pack_block(Block):
         )
     except struct.error:
         sys.exit('ERROR PACKING BLOCK')
-    #print('PREV HASH ', block_bytes[0:20],
-    #        '\nTimestamp ' , block_bytes[24:32],
-    #        '\nCASE ID ' ,block_bytes[32:48],
-    #        '\nEVIDENCE ID ' , block_bytes[48:52],
-    #        '\nSTATE ', block_bytes[52:63],
-    #        '\nDATA LENGTH ', block_bytes[64:68]
-    #        )
     return block_bytes
 
 

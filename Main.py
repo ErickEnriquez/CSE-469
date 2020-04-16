@@ -63,6 +63,17 @@ def build_blockchain_from_file(bc):
                 bc.blocks.append(block)
     return bc
 
+
+#======================================================================================================================================================
+
+#simple utility function that will open the file and append the block passed to it
+def write_to_file(block):
+    with open(os.environ['BCHOC_FILE_PATH'] ,'ab') as fp:
+       block_bytes = pack_block(block)
+       fp.write(block_bytes)
+       fp.write(block.data)
+
+
 #=======================================================================================================================================================
 
 
@@ -141,7 +152,11 @@ elif sys.argv[1] == 'checkin':
     parser.add_argument('-i', help="Specifies the evidence item’s identifier. When used with log only blocks with the given item_id are returned. The item ID must be unique within the blockchain. This means you cannot re-add an evidence item once the remove action has been performed on it.")
     args = parser.parse_args(arguments)
     bc = build_blockchain_from_file(bc) # build the blockchain file
-    print(len(bc.blocks))
+    sizeBefore = len(bc.blocks) #get the size of the file before we add any new blocks
+    bc.checkin(args.i)  #add the block to the data structure
+    for i in range(sizeBefore,len(bc.blocks)): # loop through and add append all of the new added blocks into the chain
+        write_to_file(bc.blocks[i])
+
     
 
 #=======================================================================================================================================================
