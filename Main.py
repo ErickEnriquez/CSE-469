@@ -166,7 +166,11 @@ elif sys.argv[1] == 'checkout':
         'checkout', help="Add a new checkout entry to the chain of custody for the given evidence item. Checkout actions may only be performed on evidence items that have already been added to the blockchain.")
     parser.add_argument('-i', help="Specifies the evidence item’s identifier. When used with log only blocks with the given item_id are returned. The item ID must be unique within the blockchain. This means you cannot re-add an evidence item once the remove action has been performed on it.")
     args = parser.parse_args(arguments)
-    print(args.i)  # args.i holds the value of the itme ID
+    bc = build_blockchain_from_file(bc) # build the blockchain file
+    sizeBefore = len(bc.blocks) #get the size of the file before we add any new blocks
+    bc.checkout(args.i)
+    for i in range(sizeBefore,len(bc.blocks)):
+        write_to_file(bc.blocks[i])
 
 #=======================================================================================================================================================
 

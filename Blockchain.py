@@ -153,28 +153,31 @@ class Blockchain():
 
     # Checkout an existing block from the blockchain
     # Only check out an item if that item exists in the blockchain and had been check in
-    def checkout(self, itemID):
-        exist = 0
-        check = 0
-        for j in range(0, len(self.blocks)):
-            if self.blocks[j].evidenceID == itemID:
-                exist = 1
-                if self.blocks[j].state == 'CHECKEDIN':
-                  #  self.blocks.append(Block(len(self.blocks),
-                   #                          self.blocks[len(self.blocks) - 1].hash,
-                    #                         datetime.datetime.now().isoformat(),
-                     #                        self.blocks[j].caseID, itemID, "CHECKEDOUT", 14, "data",
-                      #                       len(self.blocks) - 1))
-                    print('Case: ', self.blocks[len(self.blocks) - 1].caseID)
-                    print('Checked out item: ', self.blocks[len(self.blocks) - 1].evidenceID)
-                    print('Status: ', self.blocks[len(self.blocks) - 1].state)
-                    print('Time of action: ', self.blocks[len(self.blocks) - 1].timestamp)
-                elif self.blocks[j].state == 'CHECKEDOUT':
-                    check = 1
-        if exist == 0:
-            print("This item does not exist in the blockchain")
-        elif check == 1:
-            print('Can not check out a checked out item. Must check it in first')
+    def checkout(self, itemid):
+        exists = 0
+        j = len(self.blocks) - 1
+        while j > 0:
+            if self.blocks[j].evidenceID == int(itemid):
+                exists = 1
+                if self.blocks[j].state == STATE['in']: # if the block contains the evidence ID and it has a state of 'checkout'
+                    self.blocks.append(Block.Block(
+                            str(hashing(self.blocks[len(self.blocks) - 1])), #prev hash
+                            datetime.now(),                                  #timestamp
+                            self.blocks[j].caseID,                           #caseID
+                            itemid,                                          #evidence id
+                            STATE['out'],                                     #state
+                            0                                                #datalength
+                                     ))
+                    print('Case: ', self.blocks[j + 1].caseID)
+                    print('Checked out item: ', self.blocks[j + 1].evidenceID)
+                    print('Status: ', self.blocks[j + 1].state)
+                    print('Time of action: ', self.blocks[j + 1].timestamp)
+                    return
+                elif self.blocks[j].state == STATE['out'] or self.blocks[j].state == STATE['dis'] or self.blocks[j].state == STATE['des'] or self.blocks[j].state == STATE['rel'] or self.blocks[j].state == STATE['init']  :
+                    sys.exit('Evidence must be checked in first before checkout')
+            j = j - 1
+        if exists == 0:
+            sys.exit("This item does not exist in the blockchain")
 
     # This function verify the following:
     # Verify if H(blocks[i]) is correctly stored in next block’s previous_hash.
