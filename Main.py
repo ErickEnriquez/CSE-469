@@ -15,7 +15,7 @@ import datetime
 
 
 
-os.environ['BCHOC_FILE_PATH'] = 'data.bin' #THIS IS HERE FOR TESTING, NEEDS TO BE COMMENTED OUT WHEN SUBMITTING
+#os.environ['BCHOC_FILE_PATH'] = 'data.bin' #THIS IS HERE FOR TESTING, NEEDS TO BE COMMENTED OUT WHEN SUBMITTING
 
 bc = Blockchain()   #initialize the blockchain
 
@@ -51,17 +51,28 @@ def build_blockchain_from_file(bc):
             else:
                 block  = unpack(bytes_data)
                 block.data = fp.read(block.dataLength).decode('utf-8')
-                print('\n\n')
-                print("Previous hash: ", block.prevHash)
-                print("Timestamp: ", datetime.datetime.fromtimestamp(block.timestamp))
-                print('Case ID: ', block.caseID)
-                print('Evidence ID: ', block.evidenceID)
-                print('State: ', block.state)
-                print('Data length: ', block.dataLength)
-                print('Data: ', block.data)
-                print('\n\n')
+              #  print('\n\n')
+              #  print("Previous hash: ", block.prevHash)
+              #  print("Timestamp: ", datetime.datetime.fromtimestamp(block.timestamp))
+              #  print('Case ID: ', block.caseID)
+              #  print('Evidence ID: ', block.evidenceID)
+              #  print('State: ', block.state)
+              #  print('Data length: ', block.dataLength)
+              #  print('Data: ', block.data)
+              #  print('\n\n')
                 bc.blocks.append(block)
     return bc
+
+
+#======================================================================================================================================================
+
+#simple utility function that will open the file and append the block passed to it
+def write_to_file(block):
+    with open(os.environ['BCHOC_FILE_PATH'] ,'ab') as fp:
+       block_bytes = pack_block(block)
+       fp.write(block_bytes)
+       fp.write(block.data)
+
 
 #=======================================================================================================================================================
 
@@ -73,7 +84,7 @@ if sys.argv[1] == "init":
         sys.exit('Invalid Parameters')
     if os.path.exists(os.environ['BCHOC_FILE_PATH']) == False:# if file doesn't exist
         initial_block = Block.create_initial_block() # create initial block
-        printBlock(initial_block)
+        #printBlock(initial_block)
         block_bytes= pack_block(initial_block) #pack the inital block into bytes
         with open(os.environ['BCHOC_FILE_PATH'],'wb') as fp:   #open a file to store block
             fp.write(block_bytes)#write the initial block to binary file
@@ -118,7 +129,7 @@ elif sys.argv[1] == 'add':
                    break
                else:
                 temp_block = unpack(block_bytes)
-                print(temp_block.dataLength)
+                #print(temp_block.dataLength)
                 temp_block.data = fp.read(temp_block.dataLength)
                 bc.blocks.append(temp_block)
     sizebefore = len(bc.blocks)#store the length of the blockchain from before so we only append the new items
@@ -141,7 +152,11 @@ elif sys.argv[1] == 'checkin':
     parser.add_argument('-i', help="Specifies the evidence item’s identifier. When used with log only blocks with the given item_id are returned. The item ID must be unique within the blockchain. This means you cannot re-add an evidence item once the remove action has been performed on it.")
     args = parser.parse_args(arguments)
     bc = build_blockchain_from_file(bc) # build the blockchain file
-    print(len(bc.blocks))
+    sizeBefore = len(bc.blocks) #get the size of the file before we add any new blocks
+    bc.checkin(args.i)  #add the block to the data structure
+    for i in range(sizeBefore,len(bc.blocks)): # loop through and add append all of the new added blocks into the chain
+        write_to_file(bc.blocks[i])
+
     
 
 #=======================================================================================================================================================
@@ -151,27 +166,40 @@ elif sys.argv[1] == 'checkout':
         'checkout', help="Add a new checkout entry to the chain of custody for the given evidence item. Checkout actions may only be performed on evidence items that have already been added to the blockchain.")
     parser.add_argument('-i', help="Specifies the evidence item’s identifier. When used with log only blocks with the given item_id are returned. The item ID must be unique within the blockchain. This means you cannot re-add an evidence item once the remove action has been performed on it.")
     args = parser.parse_args(arguments)
-    print(args.i)  # args.i holds the value of the itme ID
+    bc = build_blockchain_from_file(bc) # build the blockchain file
+    sizeBefore = len(bc.blocks) #get the size of the file before we add any new blocks
+    bc.checkout(args.i)
+    for i in range(sizeBefore,len(bc.blocks)):
+        write_to_file(bc.blocks[i])
 
 #=======================================================================================================================================================
 
 elif sys.argv[1] == 'log':
     parser.add_argument('log', help="Display the blockchain entries giving the oldest first (unless -r is given).")
     parser.add_argument('-r', '--reverse',
-                        help="Reverses the order of the block entries to show the most recent entries first.")  # optional arg NEED TO FIX THIS ONE it is expect something after -r
+                        help="Reverses the order of the block entries to show the most recent entries first.",action='store_true')  # optional arg for reversing the list
     parser.add_argument('-n',
                         help="When used with log, shows num_entries number of block entries.")  # optional arg
     parser.add_argument('-c', help="Specifies the case identifier that the evidence is associated with. Must be a valid UUID. When used with log only blocks with the given case_id are returned.")  # optional arg
     parser.add_argument('-i', help="Specifies the evidence item’s identifier. When used with log only blocks with the given item_id are returned. The item ID must be unique within the blockchain. This means you cannot re-add an evidence item once the remove action has been performed on it.")  # optional arg
     args = parser.parse_args(arguments)
+    bc = build_blockchain_from_file(bc) # build the blockchain file
+
+    reverseFlag = False
+    numEntriesFlag = False
+    caseIdFlag = False
+    itemIdFlag = False
+
     if args.reverse:
-        print("you want the chain reversed")
+        reverseFlag = True
     if args.n:
-        print("you want the number of entries")
+        numEntriesFlag = True
     if args.c:
-        print("you want the only the blocks that contain this case ID")
+        caseIdFlag = True
     if args.i:
-        print("you only want the blocks that contain this item ID")
+        itemIdFlag = True
+    bc.parse_log_command(reverseFlag,numEntriesFlag,args.n,caseIdFlag,args.c,itemIdFlag,args.i)
+    #bc.log()
 
 #=======================================================================================================================================================
 

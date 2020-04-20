@@ -18,10 +18,7 @@ import binascii
 from Block import hashing
 
 import Block
-#Block.Block()
 
-
-# blocks = Block.Block()
 
 class Blockchain():
 
@@ -61,120 +58,167 @@ class Blockchain():
             print('item ID: ', self.blocks[len(self.blocks) - 1].evidenceID)
             print('Status: ', self.blocks[len(self.blocks) - 1].state.decode('utf-8'))
             print('Time of action: ', self.blocks[len(self.blocks) - 1].timestamp.isoformat())
-            print('previous hash: ' , self.blocks[len(self.blocks)-1].prevHash , " TYPE: ", type(self.blocks[len(self.blocks)-1].prevHash) ,len(self.blocks[len(self.blocks)-1].prevHash))
+            #print('previous hash: ' , self.blocks[len(self.blocks)-1].prevHash , " TYPE: ", type(self.blocks[len(self.blocks)-1].prevHash) ,len(self.blocks[len(self.blocks)-1].prevHash))
 
-    # Get the number of block in the chain
-    def size(self):
-        return len(self.blocks)
+ 
+    #this function will create list to be printed if -n is selected then it will pass it to parse_if_num_true() function
+    #possible combinations, 
+   
+    '''
+        r   n   c   i
+
+        0   0   0   0       -DONE
+        0   0   0   1       -DONE
+        0   0   1   0       -DONE
+        0   0   1   1       -DONE
+        0   1   0   0       -D
+        0   1   0   1       -D
+        0   1   1   0       -D
+        0   1   1   1       -D
+        1   0   0   0       -DONE
+        1   0   0   1       -DONE
+        1   0   1   0       -DONE
+        1   0   1   1       -DONE
+        1   1   0   0       -D
+        1   1   0   1       -D
+        1   1   1   0       -D
+        1   1   1   1       -D
+            '''
+    def parse_log_command(self,reverseFlag,numEntriesFlag , numEntries,caseIdFlag , caseId,evidenceIdFlag , evidenceId):
+        list1 = []#create a empty list
+        
+        if reverseFlag == True: #if we have the reverse flag start by reversing entire list
+            self.blocks.reverse()
+
+        if numEntriesFlag == False and caseIdFlag == False and evidenceIdFlag == False: # if we only get log or log -r
+            self.print_log_entries(self.blocks)
+            return
+
+        if numEntriesFlag == False: #if we don't have to worry about the num of entries handles all options where we don't select num entries
+            if caseIdFlag == True and evidenceIdFlag == False:#only have a case id flag
+                for i in range(0,len(self.blocks)):
+                    if self.blocks[i].caseID == uuid.UUID(caseId):
+                     list1.append(self.blocks[i])
+               # print("NUMBER OF BLOCKS THAT HAVE CORRECT CASE ID", len(list1))
+                
+            elif evidenceIdFlag == True and caseIdFlag == False:#if we have evidence id only
+                for i in range(0,len(self.blocks)):
+                    if self.blocks[i].evidenceID == int(evidenceId):
+                        list1.append(self.blocks[i])
+                #print("NUMBER OF BLOCKS THAT HAVE CORRECT EVIDENCE ID " , len(list1))
+            elif evidenceIdFlag == True and caseIdFlag == True:
+                for i in range(0,len(self.blocks)):
+                    if self.blocks[i].evidenceID == int(evidenceId) and self.blocks[i].caseID == uuid.UUID(caseId):
+                        list1.append(self.blocks[i])
+                #print("NUMBER OF BLOCKS THAT HAVE CORRECT CASE ID AND EVIDENCE ID ", len(list1))
+            if len(list1) == 0:# if we have no matches , just return and don't print
+               return
+            self.print_log_entries(list1)
+            return
+
+        if numEntriesFlag == True:
+          self.parse_if_num_true(reverseFlag,numEntriesFlag,numEntries,caseIdFlag,caseId,evidenceIdFlag,evidenceId)
 
 
-    # This function count the number of entries for a given item in the blockchain
+    # this function goes through all 8 options if the user selects -n flag
+    def parse_if_num_true(self,reverseFlag,numEntriesFlag , numEntries,caseIdFlag , caseId,evidenceIdFlag , evidenceId):
+        list1 = []
+        if int(numEntries) > len(self.blocks):  #if the user enters a number larger than the size of the blockchain
+            sys.exit('Error you entered a number larger than the number of blocks')
+        else:
+            if caseIdFlag == False and evidenceIdFlag == False:
+                for i in range(0,int(numEntries)):
+                    list1.append(self.blocks[i])
+            elif caseIdFlag == True and evidenceId == False:
+                for i in range(0,len(self.blocks)):
+                    if self.blocks[i].caseID == uuid.UUID(caseId):
+                        list1.append(self.blocks[i])
+            elif caseIdFlag == False and evidenceIdFlag == True:
+                for i in range(0,len(self.blocks)):
+                    if self.blocks[i].evidenceID == int(evidenceId):
+                        list1.append(self.blocks[i])
+            elif caseIdFlag == True and evidenceIdFlag == True:
+                for i in range(0,len(self.blocks)):
+                    if self.blocks[i].evidenceID == int(evidenceId) and self.blocks[i].caseID == uuid.UUID(caseId):
+                        list1.append(self.blocks[i])
+            if len(list1) == 0:
+                return
+            elif int(numEntries) > len(list1):
+                list2 = list1
+            else:
+                list2 = list1[:int(numEntries)]
+            self.print_log_entries(list2)
 
-    def countitem(self, item):
-        count = 0
-        for i in range(1, len(self.blocks)):
-            if self.blocks[i].evidenceID == item:
-                count = count + 1
-        return count
 
-        # Print the given item of the blockchain
-        # This will print the given item of the blockchain block in increasing order (older to recent)
+       
 
-    def loggivenitem(self, stop, item, revers):
-        count = 0
-        listentrie = []
-        for i in range(1, len(self.blocks)):
-            if self.blocks[i].evidenceID == item:
-                count = count + 1
-                listentrie.append(self.blocks[i])
-        if revers == 'n':
-            for i in range(1, stop):
-                print('Case: ', listentrie[i].caseID)
-                print('Item: ', listentrie[i].evidenceID)
-                print('Action: ', listentrie[i].state)
-                print('Time: ', listentrie[i].timestamp)
-        elif revers == 'y':
-            while stop > 0:
-                print('Case: ', listentrie[i].caseID)
-                print('Item: ', listentrie[i].evidenceID)
-                print('Action: ', listentrie[i].state)
-                print('Time: ', listentrie[i].timestamp)
-                stop = stop - 1
 
-    # Print the each block item of the blockchain
-    # This will print all the blockchain bloc in increasing order (older to recent)
 
-    def log(self, stop):
-        for i in range(1, stop):
-            print('Case: ', self.blocks[i].caseID)
-            print('Item: ', self.blocks[i].evidenceID)
-            print('Action: ', self.blocks[i].state)
-            print('Time: ', self.blocks[i].timestamp)
+    def print_log_entries(self,arr):
+        for i in range(0,len(arr)):
+            print('Case: ', arr[i].caseID)
+            print('Item: ', arr[i].evidenceID)
+            print('Action: ', arr[i].state.decode('utf-8'))
+            print('Time: ',  datetime.fromtimestamp(arr[i].timestamp))
+            print('\n')
 
-        # Print the each block item of the blockchain in reverse order
-        # This will print all the blockchain bloc in reverse order (recent to old)
-
-    def logreverse(self, stop):
-        while stop > 0:
-            print('Case: ', self.blocks[stop].caseID)
-            print('Item: ', self.blocks[stop].evidenceID)
-            print('Action: ', self.blocks[stop].state)
-            print('Time: ', self.blocks[stop].timestamp)
-            stop = stop - 1
 
     # THis function Check in an previous registred item of the blockchain
     # Only check in an item if that item previouly exist in the blockchain and hd been check out.
 
     def checkin(self, itemid):
         exists = 0
-        checks = 0
         j = len(self.blocks) - 1
         while j > 0:
-            if self.blocks[j].evidenceID == itemid:
+            if self.blocks[j].evidenceID == int(itemid):
                 exists = 1
-                if self.blocks[j].state == 'CHECKEDOUT':
-                    #self.blocks.append(Block.Block(len(self.blocks),
-                     #                        self.blocks[len(self.blocks) - 1].hash,
-                      #                       datetime.datetime.now().isoformat(),
-                      #                       self.blocks[j].caseID, itemid, "CHECKEDIN", 14, "data",
-                      #                       len(self.blocks) - 1))
+                if self.blocks[j].state == STATE['out']: # if the block contains the evidence ID and it has a state of 'checkout'
+                    self.blocks.append(Block.Block(
+                            str(hashing(self.blocks[len(self.blocks) - 1])), #prev hash
+                            datetime.now(),                                  #timestamp
+                            self.blocks[j].caseID,                           #caseID
+                            itemid,                                          #evidence id
+                            STATE['in'],                                     #state
+                            0                                                #datalength
+                                     ))
+                    print('Case: ', self.blocks[j + 1].caseID)
+                    print('Checked in item: ', self.blocks[j + 1].evidenceID)
+                    print('Status: ', self.blocks[j + 1].state)
+                    print('Time of action: ', self.blocks[j + 1].timestamp)
+                    return
+                elif self.blocks[j].state == STATE['in'] or self.blocks[j].state == STATE['dis'] or self.blocks[j].state == STATE['des'] or self.blocks[j].state == STATE['rel'] or self.blocks[j].state == STATE['init']  :
+                    sys.exit('Evidence must be checked out first before checkin')
+            j = j - 1
+        if exists == 0:
+            sys.exit("This item does not exist in the blockchain")
+
+    # Checkout an existing block from the blockchain
+    # Only check out an item if that item exists in the blockchain and had been check in
+    def checkout(self, itemid):
+        exists = 0
+        j = len(self.blocks) - 1
+        while j > 0:
+            if self.blocks[j].evidenceID == int(itemid):
+                exists = 1
+                if self.blocks[j].state == STATE['in']: # if the block contains the evidence ID and it has a state of 'checkout'
+                    self.blocks.append(Block.Block(
+                            str(hashing(self.blocks[len(self.blocks) - 1])), #prev hash
+                            datetime.now(),                                  #timestamp
+                            self.blocks[j].caseID,                           #caseID
+                            itemid,                                          #evidence id
+                            STATE['out'],                                     #state
+                            0                                                #datalength
+                                     ))
                     print('Case: ', self.blocks[j + 1].caseID)
                     print('Checked out item: ', self.blocks[j + 1].evidenceID)
                     print('Status: ', self.blocks[j + 1].state)
                     print('Time of action: ', self.blocks[j + 1].timestamp)
-                    break
-                elif self.blocks[j].state == 'CHECKEDIN':
-                    checks = 1
+                    return
+                elif self.blocks[j].state == STATE['out'] or self.blocks[j].state == STATE['dis'] or self.blocks[j].state == STATE['des'] or self.blocks[j].state == STATE['rel'] or self.blocks[j].state == STATE['init']  :
+                    sys.exit('Evidence must be checked in first before checkout')
             j = j - 1
         if exists == 0:
-            print("This item does not exist in the blockchain")
-        elif checks == 1:
-            print('Can not check in a checked in item. Must check it out first')
-
-    # Checkout an existing block from the blockchain
-    # Only check out an item if that item exists in the blockchain and had been check in
-    def checkout(self, itemID):
-        exist = 0
-        check = 0
-        for j in range(0, len(self.blocks)):
-            if self.blocks[j].evidenceID == itemID:
-                exist = 1
-                if self.blocks[j].state == 'CHECKEDIN':
-                  #  self.blocks.append(Block(len(self.blocks),
-                   #                          self.blocks[len(self.blocks) - 1].hash,
-                    #                         datetime.datetime.now().isoformat(),
-                     #                        self.blocks[j].caseID, itemID, "CHECKEDOUT", 14, "data",
-                      #                       len(self.blocks) - 1))
-                    print('Case: ', self.blocks[len(self.blocks) - 1].caseID)
-                    print('Checked out item: ', self.blocks[len(self.blocks) - 1].evidenceID)
-                    print('Status: ', self.blocks[len(self.blocks) - 1].state)
-                    print('Time of action: ', self.blocks[len(self.blocks) - 1].timestamp)
-                elif self.blocks[j].state == 'CHECKEDOUT':
-                    check = 1
-        if exist == 0:
-            print("This item does not exist in the blockchain")
-        elif check == 1:
-            print('Can not check out a checked out item. Must check it in first')
+            sys.exit("This item does not exist in the blockchain")
 
     # This function verify the following:
     # Verify if H(blocks[i]) is correctly stored in next block’s previous_hash.

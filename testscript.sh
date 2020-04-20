@@ -11,4 +11,4 @@ make add_1_more
 
 make add_one_test
 
-make verify_test
+make log_test
