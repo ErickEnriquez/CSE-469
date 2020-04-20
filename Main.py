@@ -177,23 +177,29 @@ elif sys.argv[1] == 'checkout':
 elif sys.argv[1] == 'log':
     parser.add_argument('log', help="Display the blockchain entries giving the oldest first (unless -r is given).")
     parser.add_argument('-r', '--reverse',
-                        help="Reverses the order of the block entries to show the most recent entries first.")  # optional arg NEED TO FIX THIS ONE it is expect something after -r
+                        help="Reverses the order of the block entries to show the most recent entries first.",action='store_true')  # optional arg for reversing the list
     parser.add_argument('-n',
                         help="When used with log, shows num_entries number of block entries.")  # optional arg
     parser.add_argument('-c', help="Specifies the case identifier that the evidence is associated with. Must be a valid UUID. When used with log only blocks with the given case_id are returned.")  # optional arg
     parser.add_argument('-i', help="Specifies the evidence item’s identifier. When used with log only blocks with the given item_id are returned. The item ID must be unique within the blockchain. This means you cannot re-add an evidence item once the remove action has been performed on it.")  # optional arg
     args = parser.parse_args(arguments)
     bc = build_blockchain_from_file(bc) # build the blockchain file
-    sizeBefore = len(bc.blocks) #get the size of the file before we add any new blocks
+
+    reverseFlag = False
+    numEntriesFlag = False
+    caseIdFlag = False
+    itemIdFlag = False
+
     if args.reverse:
-        print("you want the chain reversed")
+        reverseFlag = True
     if args.n:
-        print("you want the number of entries")
+        numEntriesFlag = True
     if args.c:
-        print("you want the only the blocks that contain this case ID")
+        caseIdFlag = True
     if args.i:
-        print("you only want the blocks that contain this item ID")
-    bc.log()
+        itemIdFlag = True
+    bc.parse_log_command(reverseFlag,numEntriesFlag,args.n,caseIdFlag,args.c,itemIdFlag,args.i)
+    #bc.log()
 
 #=======================================================================================================================================================
 

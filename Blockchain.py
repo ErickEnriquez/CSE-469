@@ -60,65 +60,104 @@ class Blockchain():
             print('Time of action: ', self.blocks[len(self.blocks) - 1].timestamp.isoformat())
             #print('previous hash: ' , self.blocks[len(self.blocks)-1].prevHash , " TYPE: ", type(self.blocks[len(self.blocks)-1].prevHash) ,len(self.blocks[len(self.blocks)-1].prevHash))
 
-    # Get the number of block in the chain
-    def size(self):
-        return len(self.blocks)
+ 
+    #this function will create list to be printed if -n is selected then it will pass it to parse_if_num_true() function
+    #possible combinations, 
+   
+    '''
+        r   n   c   i
+
+        0   0   0   0       -DONE
+        0   0   0   1       -DONE
+        0   0   1   0       -DONE
+        0   0   1   1       -DONE
+        0   1   0   0       -D
+        0   1   0   1       -D
+        0   1   1   0       -D
+        0   1   1   1       -D
+        1   0   0   0       -DONE
+        1   0   0   1       -DONE
+        1   0   1   0       -DONE
+        1   0   1   1       -DONE
+        1   1   0   0       -D
+        1   1   0   1       -D
+        1   1   1   0       -D
+        1   1   1   1       -D
+            '''
+    def parse_log_command(self,reverseFlag,numEntriesFlag , numEntries,caseIdFlag , caseId,evidenceIdFlag , evidenceId):
+        list1 = []#create a empty list
+        
+
+        if reverseFlag == True: #if we have the reverse flag start by reversing entire list
+            self.blocks.reverse()
+
+        if numEntriesFlag == False and caseIdFlag == False and evidenceIdFlag == False: # if we only get log or log -r
+            self.print_log_entries(self.blocks)
+            return
+
+        if numEntriesFlag == False: #if we don't have to worry about the num of entries handles all options where we don't select num entries
+            if caseIdFlag == True and evidenceIdFlag == False:#only have a case id flag
+                for i in range(0,len(self.blocks)):
+                    if self.blocks[i].caseID == uuid.UUID(caseId):
+                     list1.append(self.blocks[i])
+                print("NUMBER OF BLOCKS THAT HAVE CORRECT CASE ID", len(list1))
+                
+            elif evidenceIdFlag == True and caseIdFlag == False:#if we have evidence id only
+                for i in range(0,len(self.blocks)):
+                    if self.blocks[i].evidenceID == int(evidenceId):
+                        list1.append(self.blocks[i])
+                print("NUMBER OF BLOCKS THAT HAVE CORRECT EVIDENCE ID " , len(list1))
+            elif evidenceIdFlag == True and caseIdFlag == True:
+                for i in range(0,len(self.blocks)):
+                    if self.blocks[i].evidenceID == int(evidenceId) and self.blocks[i].caseID == uuid.UUID(caseId):
+                        list1.append(self.blocks[i])
+                print("NUMBER OF BLOCKS THAT HAVE CORRECT CASE ID AND EVIDENCE ID ", len(list1))
+            self.print_log_entries(list1)
+            return
+
+        if numEntriesFlag == True:
+          self.parse_if_num_true(reverseFlag,numEntriesFlag,numEntries,caseIdFlag,caseId,evidenceIdFlag,evidenceId)
 
 
-    # This function count the number of entries for a given item in the blockchain
+    # this function goes through all 8 options if the user selects -n flag
+    def parse_if_num_true(self,reverseFlag,numEntriesFlag , numEntries,caseIdFlag , caseId,evidenceIdFlag , evidenceId):
+        list1 = []
+        if int(numEntries) > len(self.blocks):  #if the user enters a number larger than the size of the blockchain
+            sys.exit('Error you entered a number larger than the number of blocks')
+        else:
+            if caseIdFlag == False and evidenceIdFlag == False:
+                for i in range(0,int(numEntries)):
+                    list1.append(self.blocks[i])
+            elif caseIdFlag == True and evidenceId == False:
+                for i in range(0,len(self.blocks)):
+                    if self.blocks[i].caseID == uuid.UUID(caseId):
+                        list1.append(self.blocks[i])
+            elif caseIdFlag == False and evidenceIdFlag == True:
+                for i in range(0,len(self.blocks)):
+                    if self.blocks[i].evidenceID == int(evidenceId):
+                        list1.append(self.blocks[i])
+            elif caseIdFlag == True and evidenceIdFlag == True:
+                for i in range(0,len(self.blocks)):
+                    if self.blocks[i].evidenceID == int(evidenceId) and self.blocks[i].caseID == uuid.UUID(caseId):
+                        list1.append(self.blocks[i])
+            if int(numEntries) > len(list1):
+                sys.exit('Error you entered a number larger than the number of blocks matching criteria')
+            list2 = list1[:int(numEntries)]
+            self.print_log_entries(list2)
 
-    def countitem(self, item):
-        count = 0
-        for i in range(1, len(self.blocks)):
-            if self.blocks[i].evidenceID == item:
-                count = count + 1
-        return count
 
-        # Print the given item of the blockchain
-        # This will print the given item of the blockchain block in increasing order (older to recent)
+       
 
-    def loggivenitem(self, stop, item, revers):
-        count = 0
-        listentrie = []
-        for i in range(1, len(self.blocks)):
-            if self.blocks[i].evidenceID == item:
-                count = count + 1
-                listentrie.append(self.blocks[i])
-        if revers == 'n':
-            for i in range(1, stop):
-                print('Case: ', listentrie[i].caseID)
-                print('Item: ', listentrie[i].evidenceID)
-                print('Action: ', listentrie[i].state)
-                print('Time: ', listentrie[i].timestamp)
-        elif revers == 'y':
-            while stop > 0:
-                print('Case: ', listentrie[i].caseID)
-                print('Item: ', listentrie[i].evidenceID)
-                print('Action: ', listentrie[i].state)
-                print('Time: ', listentrie[i].timestamp)
-                stop = stop - 1
 
-    # Print the each block item of the blockchain
-    # This will print all the blockchain bloc in increasing order (older to recent)
 
-    def log(self):
-        for i in range(0, len(self.blocks)):
-            print('Case: ', self.blocks[i].caseID)
-            print('Item: ', self.blocks[i].evidenceID)
-            print('Action: ', self.blocks[i].state.decode('utf-8'))
-            print('Time: ',  datetime.fromtimestamp(self.blocks[i].timestamp))
+    def print_log_entries(self,arr):
+        for i in range(0,len(arr)):
+            print('Case: ', arr[i].caseID)
+            print('Item: ', arr[i].evidenceID)
+            print('Action: ', arr[i].state.decode('utf-8'))
+            print('Time: ',  datetime.fromtimestamp(arr[i].timestamp))
             print('\n')
 
-        # Print the each block item of the blockchain in reverse order
-        # This will print all the blockchain bloc in reverse order (recent to old)
-
-    def logreverse(self, stop):
-        while stop > 0:
-            print('Case: ', self.blocks[stop].caseID)
-            print('Item: ', self.blocks[stop].evidenceID)
-            print('Action: ', self.blocks[stop].state)
-            print('Time: ', self.blocks[stop].timestamp)
-            stop = stop - 1
 
     # THis function Check in an previous registred item of the blockchain
     # Only check in an item if that item previouly exist in the blockchain and hd been check out.
