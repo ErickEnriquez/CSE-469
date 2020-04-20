@@ -99,20 +99,20 @@ class Blockchain():
                 for i in range(0,len(self.blocks)):
                     if self.blocks[i].caseID == uuid.UUID(caseId):
                      list1.append(self.blocks[i])
-                print("NUMBER OF BLOCKS THAT HAVE CORRECT CASE ID", len(list1))
+               # print("NUMBER OF BLOCKS THAT HAVE CORRECT CASE ID", len(list1))
                 
             elif evidenceIdFlag == True and caseIdFlag == False:#if we have evidence id only
                 for i in range(0,len(self.blocks)):
                     if self.blocks[i].evidenceID == int(evidenceId):
                         list1.append(self.blocks[i])
-                print("NUMBER OF BLOCKS THAT HAVE CORRECT EVIDENCE ID " , len(list1))
+                #print("NUMBER OF BLOCKS THAT HAVE CORRECT EVIDENCE ID " , len(list1))
             elif evidenceIdFlag == True and caseIdFlag == True:
                 for i in range(0,len(self.blocks)):
                     if self.blocks[i].evidenceID == int(evidenceId) and self.blocks[i].caseID == uuid.UUID(caseId):
                         list1.append(self.blocks[i])
-                print("NUMBER OF BLOCKS THAT HAVE CORRECT CASE ID AND EVIDENCE ID ", len(list1))
-            if len(list1) == 0:
-                sys.exit("ERROR NO MATCHING CRITERIA")
+                #print("NUMBER OF BLOCKS THAT HAVE CORRECT CASE ID AND EVIDENCE ID ", len(list1))
+            if len(list1) == 0:# if we have no matches , just return and don't print
+               return
             self.print_log_entries(list1)
             return
 
@@ -141,9 +141,12 @@ class Blockchain():
                 for i in range(0,len(self.blocks)):
                     if self.blocks[i].evidenceID == int(evidenceId) and self.blocks[i].caseID == uuid.UUID(caseId):
                         list1.append(self.blocks[i])
-            if int(numEntries) > len(list1):
-                sys.exit('Error you entered a number larger than the number of blocks matching criteria')
-            list2 = list1[:int(numEntries)]
+            if len(list1) == 0:
+                return
+            elif int(numEntries) > len(list1):
+                list2 = list1
+            else:
+                list2 = list1[:int(numEntries)]
             self.print_log_entries(list2)
 
 
