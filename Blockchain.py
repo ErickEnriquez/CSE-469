@@ -107,6 +107,7 @@ class Blockchain():
             print('Item: ', self.blocks[i].evidenceID)
             print('Action: ', self.blocks[i].state.decode('utf-8'))
             print('Time: ',  datetime.fromtimestamp(self.blocks[i].timestamp))
+            print('\n')
 
         # Print the each block item of the blockchain in reverse order
         # This will print all the blockchain bloc in reverse order (recent to old)
