@@ -51,15 +51,15 @@ def build_blockchain_from_file(bc):
             else:
                 block  = unpack(bytes_data)
                 block.data = fp.read(block.dataLength).decode('utf-8')
-                print('\n\n')
-                print("Previous hash: ", block.prevHash)
-                print("Timestamp: ", datetime.datetime.fromtimestamp(block.timestamp))
-                print('Case ID: ', block.caseID)
-                print('Evidence ID: ', block.evidenceID)
-                print('State: ', block.state)
-                print('Data length: ', block.dataLength)
-                print('Data: ', block.data)
-                print('\n\n')
+              #  print('\n\n')
+              #  print("Previous hash: ", block.prevHash)
+              #  print("Timestamp: ", datetime.datetime.fromtimestamp(block.timestamp))
+              #  print('Case ID: ', block.caseID)
+              #  print('Evidence ID: ', block.evidenceID)
+              #  print('State: ', block.state)
+              #  print('Data length: ', block.dataLength)
+              #  print('Data: ', block.data)
+              #  print('\n\n')
                 bc.blocks.append(block)
     return bc
 
@@ -84,7 +84,7 @@ if sys.argv[1] == "init":
         sys.exit('Invalid Parameters')
     if os.path.exists(os.environ['BCHOC_FILE_PATH']) == False:# if file doesn't exist
         initial_block = Block.create_initial_block() # create initial block
-        printBlock(initial_block)
+        #printBlock(initial_block)
         block_bytes= pack_block(initial_block) #pack the inital block into bytes
         with open(os.environ['BCHOC_FILE_PATH'],'wb') as fp:   #open a file to store block
             fp.write(block_bytes)#write the initial block to binary file
@@ -129,7 +129,7 @@ elif sys.argv[1] == 'add':
                    break
                else:
                 temp_block = unpack(block_bytes)
-                print(temp_block.dataLength)
+                #print(temp_block.dataLength)
                 temp_block.data = fp.read(temp_block.dataLength)
                 bc.blocks.append(temp_block)
     sizebefore = len(bc.blocks)#store the length of the blockchain from before so we only append the new items
@@ -183,6 +183,8 @@ elif sys.argv[1] == 'log':
     parser.add_argument('-c', help="Specifies the case identifier that the evidence is associated with. Must be a valid UUID. When used with log only blocks with the given case_id are returned.")  # optional arg
     parser.add_argument('-i', help="Specifies the evidence item’s identifier. When used with log only blocks with the given item_id are returned. The item ID must be unique within the blockchain. This means you cannot re-add an evidence item once the remove action has been performed on it.")  # optional arg
     args = parser.parse_args(arguments)
+    bc = build_blockchain_from_file(bc) # build the blockchain file
+    sizeBefore = len(bc.blocks) #get the size of the file before we add any new blocks
     if args.reverse:
         print("you want the chain reversed")
     if args.n:
@@ -191,6 +193,7 @@ elif sys.argv[1] == 'log':
         print("you want the only the blocks that contain this case ID")
     if args.i:
         print("you only want the blocks that contain this item ID")
+    bc.log()
 
 #=======================================================================================================================================================
 

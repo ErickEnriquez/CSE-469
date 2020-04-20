@@ -18,10 +18,7 @@ import binascii
 from Block import hashing
 
 import Block
-#Block.Block()
 
-
-# blocks = Block.Block()
 
 class Blockchain():
 
@@ -61,7 +58,7 @@ class Blockchain():
             print('item ID: ', self.blocks[len(self.blocks) - 1].evidenceID)
             print('Status: ', self.blocks[len(self.blocks) - 1].state.decode('utf-8'))
             print('Time of action: ', self.blocks[len(self.blocks) - 1].timestamp.isoformat())
-            print('previous hash: ' , self.blocks[len(self.blocks)-1].prevHash , " TYPE: ", type(self.blocks[len(self.blocks)-1].prevHash) ,len(self.blocks[len(self.blocks)-1].prevHash))
+            #print('previous hash: ' , self.blocks[len(self.blocks)-1].prevHash , " TYPE: ", type(self.blocks[len(self.blocks)-1].prevHash) ,len(self.blocks[len(self.blocks)-1].prevHash))
 
     # Get the number of block in the chain
     def size(self):
@@ -104,12 +101,12 @@ class Blockchain():
     # Print the each block item of the blockchain
     # This will print all the blockchain bloc in increasing order (older to recent)
 
-    def log(self, stop):
-        for i in range(1, stop):
+    def log(self):
+        for i in range(0, len(self.blocks)):
             print('Case: ', self.blocks[i].caseID)
             print('Item: ', self.blocks[i].evidenceID)
-            print('Action: ', self.blocks[i].state)
-            print('Time: ', self.blocks[i].timestamp)
+            print('Action: ', self.blocks[i].state.decode('utf-8'))
+            print('Time: ',  datetime.fromtimestamp(self.blocks[i].timestamp))
 
         # Print the each block item of the blockchain in reverse order
         # This will print all the blockchain bloc in reverse order (recent to old)

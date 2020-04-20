@@ -26,3 +26,6 @@ add_1_more:
 
 add_many_test:
 	./bchoc add -c 954a9eb9-f7db-442a-a08c-e5826584543d -i 1547161094 -i 2630006027 -i 1036897748 -i 2897527353 -i 3953455618 -i 3412673101 -i 3235388174
+
+log_test:
+	./bchoc log
