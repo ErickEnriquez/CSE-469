@@ -87,7 +87,6 @@ class Blockchain():
     def parse_log_command(self,reverseFlag,numEntriesFlag , numEntries,caseIdFlag , caseId,evidenceIdFlag , evidenceId):
         list1 = []#create a empty list
         
-
         if reverseFlag == True: #if we have the reverse flag start by reversing entire list
             self.blocks.reverse()
 
@@ -112,6 +111,8 @@ class Blockchain():
                     if self.blocks[i].evidenceID == int(evidenceId) and self.blocks[i].caseID == uuid.UUID(caseId):
                         list1.append(self.blocks[i])
                 print("NUMBER OF BLOCKS THAT HAVE CORRECT CASE ID AND EVIDENCE ID ", len(list1))
+            if len(list1) == 0:
+                sys.exit("ERROR NO MATCHING CRITERIA")
             self.print_log_entries(list1)
             return
 
