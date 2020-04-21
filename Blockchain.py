@@ -251,6 +251,35 @@ class Blockchain():
 
         return flag
 
+    # remove an existing block from the blockchain
+    # Only remove an item if that item exists in the blockchain and had been check in
+    def remove (self, itemid, status):
+        exists = 0
+        j = len(self.blocks) - 1
+        while j > 0:
+            if self.blocks[j].evidenceID == int(itemid):
+                exists = 1
+                if self.blocks[j].state == STATE[status]: # if the block contains the evidence ID and it has a state of 'checkin'
+                    self.blocks.append(Block.Block(
+                            str(hashing(self.blocks[len(self.blocks) - 1])), #prev hash
+                            datetime.now(),                                  #timestamp
+                            self.blocks[j].caseID,                           #caseID
+                            itemid,                                          #evidence id
+                            STATE[status],                                     #state
+                            0                                                #datalength
+                                     ))
+                    print('Case: ', self.blocks[j + 1].caseID)
+                    print('Checked out item: ', self.blocks[j + 1].evidenceID)
+                    print('Status: ', self.blocks[j + 1].state)
+                    print('Time of action: ', self.blocks[j + 1].timestamp)
+                    #print('Owner: ', self.blocks[j + 1])-------------------------------------------------------
+                    return
+                elif self.blocks[j].state == STATE['out'] or self.blocks[j].state == STATE['dis'] or self.blocks[j].state == STATE['des'] or self.blocks[j].state == STATE['rel'] or self.blocks[j].state == STATE['init']  :
+                    sys.exit('Evidence must be checked in first before remove')
+            j = j - 1
+        if exists == 0:
+            sys.exit("This item does not exist in the blockchain")
+
 
 STATE = {
     "init": b"INITIAL\0\0\0\0",
