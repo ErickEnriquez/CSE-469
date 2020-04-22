@@ -208,14 +208,25 @@ elif sys.argv[1] == 'remove':
     parser.add_argument('-i', help="Specifies the evidence item’s identifier. When used with log only blocks with the given item_id are returned. The item ID must be unique within the blockchain. This means you cannot re-add an evidence item once the remove action has been performed on it.")
     parser.add_argument(
         '-y', '--why', help="Reason for the removal of the evidence item. Must be one of: DISPOSED, DESTROYED, or RELEASED. If the reason given is RELEASED, -o must also be given.")
-    parser.add_argument(
-        '-o', help="Information about the lawful owner to whom the evidence was released. At this time, text is free-form and does not have any requirements.")
+    if sys.argv[5] == 'RELEASED':
+        parser.add_argument(
+            '-o', help="Information about the lawful owner to whom the evidence was released. At this time, text is free-form and does not have any requirements.")
     args = parser.parse_args(arguments)
     print( "THIS IS THE EVIDENCE ID ", args.i , "\nThis is the why reason" , args.why , "\nThis is the -owner if applicable " , args.o)
     #what you have to do first is call the function that will read the file and then store it in bc object
     bc = build_blockchain_from_file(bc) # build the blockchain file
     
     #TO DO , develop the bc.remove function and then call it with the args that it needs
+    sizeBefore = len(bc.blocks) #get the size of the file before we add any new blocks
+
+    #if the reason is RELEASED we sent the owner infos else nothing
+    if sys.argv[5] == 'RELEASED':
+        bc.remove(args.i, args.y, args.o)
+    else:
+        bc.remove(args.i, args.y, b'')
+    for i in range(sizeBefore,len(bc.blocks)):
+        write_to_file(bc.blocks[i])
+
 
 #=======================================================================================================================================================
 
