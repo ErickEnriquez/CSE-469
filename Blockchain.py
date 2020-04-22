@@ -28,7 +28,7 @@ class Blockchain():
 
 
     # Add a new block to the chain and make sure there is no item duplicate
-    def add(self, case, item):
+    def add(self, case, item, data):
         exist = 0
         for j in range(0, len(self.blocks)):
             if str(self.blocks[j].evidenceID) == item:
@@ -43,7 +43,8 @@ class Blockchain():
                    UUID(case),
                    item,
                    STATE['in'],
-                   0 
+                   0,
+                   data,   #Me
                 ))
             else:
                 self.blocks.append(Block.Block(
@@ -52,7 +53,8 @@ class Blockchain():
                                     UUID(case),                                   #caseID
                                     item,                                   #evidence id
                                     STATE['in'],                            #state
-                                    0                                      #datalength
+                                    0,                                    #datalength
+                                    data,                                   #data
                                      ))
             print('Case: ', self.blocks[len(self.blocks) - 1].caseID)
             print('item ID: ', self.blocks[len(self.blocks) - 1].evidenceID)
@@ -166,7 +168,7 @@ class Blockchain():
     # THis function Check in an previous registred item of the blockchain
     # Only check in an item if that item previouly exist in the blockchain and hd been check out.
 
-    def checkin(self, itemid):
+    def checkin(self, itemid,data):
         exists = 0
         j = len(self.blocks) - 1
         while j > 0:
@@ -179,7 +181,8 @@ class Blockchain():
                             self.blocks[j].caseID,                           #caseID
                             itemid,                                          #evidence id
                             STATE['in'],                                     #state
-                            0                                                #datalength
+                            0,                                                #datalength
+                            data,                                            #data
                                      ))
                     print('Case: ', self.blocks[j + 1].caseID)
                     print('Checked in item: ', self.blocks[j + 1].evidenceID)
@@ -194,7 +197,7 @@ class Blockchain():
 
     # Checkout an existing block from the blockchain
     # Only check out an item if that item exists in the blockchain and had been check in
-    def checkout(self, itemid):
+    def checkout(self, itemid,data):
         exists = 0
         j = len(self.blocks) - 1
         while j > 0:
@@ -207,7 +210,8 @@ class Blockchain():
                             self.blocks[j].caseID,                           #caseID
                             itemid,                                          #evidence id
                             STATE['out'],                                     #state
-                            0                                                #datalength
+                            0 ,                                               #datalength
+                            data,                                           #data
                                      ))
                     print('Case: ', self.blocks[j + 1].caseID)
                     print('Checked out item: ', self.blocks[j + 1].evidenceID)
@@ -253,26 +257,30 @@ class Blockchain():
 
     # remove an existing block from the blockchain
     # Only remove an item if that item exists in the blockchain and had been check in
-    def remove (self, itemid, status):
+    def remove (self, itemid, status, data):
         exists = 0
         j = len(self.blocks) - 1
         while j > 0:
             if self.blocks[j].evidenceID == int(itemid):
                 exists = 1
-                if self.blocks[j].state == STATE[status]: # if the block contains the evidence ID and it has a state of 'checkin'
+                if self.blocks[j].state == STATE['in']: # if the block contains the evidence ID and it has a state of 'checkin'
                     self.blocks.append(Block.Block(
                             str(hashing(self.blocks[len(self.blocks) - 1])), #prev hash
                             datetime.now(),                                  #timestamp
                             self.blocks[j].caseID,                           #caseID
                             itemid,                                          #evidence id
-                            STATE[status],                                     #state
-                            0                                                #datalength
+                            status,                                          #state
+                            0 ,                                              #datalength
+                            data,                                            #data
                                      ))
                     print('Case: ', self.blocks[j + 1].caseID)
-                    print('Checked out item: ', self.blocks[j + 1].evidenceID)
+                    print('Removed item: ', self.blocks[j + 1].evidenceID)
                     print('Status: ', self.blocks[j + 1].state)
+                    #print the owner infos if the reason is RELEASED
+                    if status == STATE['rel']: 
+                        print('Owner info: ', self.blocks[j + 1].data)  #Me
                     print('Time of action: ', self.blocks[j + 1].timestamp)
-                    #print('Owner: ', self.blocks[j + 1])-------------------------------------------------------
+                                            
                     return
                 elif self.blocks[j].state == STATE['out'] or self.blocks[j].state == STATE['dis'] or self.blocks[j].state == STATE['des'] or self.blocks[j].state == STATE['rel'] or self.blocks[j].state == STATE['init']  :
                     sys.exit('Evidence must be checked in first before remove')

@@ -14,15 +14,16 @@ class Block():
 
     # init method or constructor of the block class
 
-    def __init__(self ,prevHash, timestamp, caseID, evidenceID, state, dataLength ):#default value for data
+    def __init__(self ,prevHash, timestamp, caseID, evidenceID, state, dataLength, data):#default value for data
         self.prevHash = prevHash
         self.timestamp = timestamp
         self.caseID = caseID
         self.state = state
         self.evidenceID = int(evidenceID)
         self.dataLength = int(dataLength)
-        self.data = b''
-
+       # self.data = b''
+        self.data = data  #Me
+       
 
     
 # This function defines the hash of the current block i H(Block[i]).
@@ -49,6 +50,7 @@ def create_initial_block():
         0,  # 04 bytes : evidenceId
         b"INITIAL\0\0\0\0", # 11 bytes : state
         14, # 04 bytes : data_length
+        b'',
         )
     initial_block.data = b"Initial block\0" # varies bytes : data
     return initial_block
