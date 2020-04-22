@@ -210,8 +210,12 @@ elif sys.argv[1] == 'remove':
         '-y', '--why', help="Reason for the removal of the evidence item. Must be one of: DISPOSED, DESTROYED, or RELEASED. If the reason given is RELEASED, -o must also be given.")
     parser.add_argument(
         '-o', help="Information about the lawful owner to whom the evidence was released. At this time, text is free-form and does not have any requirements.")
-    print('remove')
-
+    args = parser.parse_args(arguments)
+    print( "THIS IS THE EVIDENCE ID ", args.i , "\nThis is the why reason" , args.why , "\nThis is the -owner if applicable " , args.o)
+    #what you have to do first is call the function that will read the file and then store it in bc object
+    bc = build_blockchain_from_file(bc) # build the blockchain file
+    
+    #TO DO , develop the bc.remove function and then call it with the args that it needs
 
 #=======================================================================================================================================================
 
