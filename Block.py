@@ -14,14 +14,13 @@ class Block():
 
     # init method or constructor of the block class
 
-    def __init__(self ,prevHash, timestamp, caseID, evidenceID, state, dataLength, data):#default value for data
+    def __init__(self ,prevHash, timestamp, caseID, evidenceID, state, dataLength, data=b''):#default value for data
         self.prevHash = prevHash
         self.timestamp = timestamp
         self.caseID = caseID
         self.state = state
         self.evidenceID = int(evidenceID)
         self.dataLength = int(dataLength)
-       # self.data = b''
         self.data = data  #Me
        
 

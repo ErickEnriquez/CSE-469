@@ -51,7 +51,7 @@ def pack_block(Block):
             Block.evidenceID,
             Block.state,
             Block.dataLength,
-            Block.data  #Me
+           # Block.data  #Me
         )
     except struct.error:
         sys.exit('ERROR PACKING BLOCK')
@@ -80,8 +80,8 @@ def unpack(block_bytes):
         UUID(bytes=temp),
         block_contents[3],
         block_contents[4],
-        block_contents[5],
-        block_contents[6],   #Me
+        block_contents[5]
+        #block_contents[6],   #Me
     )
     
     return newBlock

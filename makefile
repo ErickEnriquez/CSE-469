@@ -13,10 +13,10 @@ verify_test:
 	./bchoc verify
 
 checkin_test:
-	./bchoc checkin -i 123456789
+	./bchoc checkin -i 3537722555
 
 checkout_test:
-	./bchoc checkout -i 987654321
+	./bchoc checkout -i 3537722555
 
 add_one_test:
 	./bchoc add -c fce7da5c-4994-45db-9440-0b872895db01 -i 3537722555

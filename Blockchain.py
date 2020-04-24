@@ -60,7 +60,6 @@ class Blockchain():
             print('item ID: ', self.blocks[len(self.blocks) - 1].evidenceID)
             print('Status: ', self.blocks[len(self.blocks) - 1].state.decode('utf-8'))
             print('Time of action: ', self.blocks[len(self.blocks) - 1].timestamp.isoformat())
-            #print('previous hash: ' , self.blocks[len(self.blocks)-1].prevHash , " TYPE: ", type(self.blocks[len(self.blocks)-1].prevHash) ,len(self.blocks[len(self.blocks)-1].prevHash))
 
  
     #this function will create list to be printed if -n is selected then it will pass it to parse_if_num_true() function
