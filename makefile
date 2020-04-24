@@ -29,3 +29,6 @@ add_many_test:
 
 log_test:
 	./bchoc log
+
+remove_no_owner:
+	./bchoc remove -i 3537722555 -y DISPOSED
