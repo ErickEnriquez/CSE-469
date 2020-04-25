@@ -280,7 +280,7 @@ class Blockchain():
                                 itemid,                                          #evidence id
                                 STATE[reason],                                     #state
                                 0 ,                                              #datalength
-                                data,                                            #data
+                                data.encode(),                                   #data
                                         ))
                         print('Case: ', self.blocks[j + 1].caseID)
                         print('Removed item: ', self.blocks[j + 1].evidenceID)
