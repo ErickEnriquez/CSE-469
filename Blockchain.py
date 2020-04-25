@@ -44,7 +44,7 @@ class Blockchain():
                    item,
                    STATE['in'],
                    0,
-                   data,   #Me
+                   data.encode(),   #Me
                 ))
             else:
                 self.blocks.append(Block.Block(
@@ -181,7 +181,7 @@ class Blockchain():
                             itemid,                                          #evidence id
                             STATE['in'],                                     #state
                             0,                                                #datalength
-                            data,                                            #data
+                            data.encode(),                                            #data
                                      ))
                     print('Case: ', self.blocks[j + 1].caseID)
                     print('Checked in item: ', self.blocks[j + 1].evidenceID)
@@ -210,7 +210,7 @@ class Blockchain():
                             itemid,                                          #evidence id
                             STATE['out'],                                     #state
                             0 ,                                               #datalength
-                            data,                                           #data
+                            data.encode(),                                           #data
                                      ))
                     print('Case: ', self.blocks[j + 1].caseID)
                     print('Checked out item: ', self.blocks[j + 1].evidenceID)
