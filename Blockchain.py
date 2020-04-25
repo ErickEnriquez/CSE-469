@@ -44,7 +44,7 @@ class Blockchain():
                    item,
                    STATE['in'],
                    0,
-                   data.encode(),   #Me
+                   b'',   #Me
                 ))
             else:
                 self.blocks.append(Block.Block(
@@ -181,7 +181,7 @@ class Blockchain():
                             itemid,                                          #evidence id
                             STATE['in'],                                     #state
                             0,                                                #datalength
-                            data.encode(),                                            #data
+                            b'',                                            #data
                                      ))
                     print('Case: ', self.blocks[j + 1].caseID)
                     print('Checked in item: ', self.blocks[j + 1].evidenceID)
@@ -210,7 +210,7 @@ class Blockchain():
                             itemid,                                          #evidence id
                             STATE['out'],                                     #state
                             0 ,                                               #datalength
-                            data.encode(),                                           #data
+                            b'',                                           #data
                                      ))
                     print('Case: ', self.blocks[j + 1].caseID)
                     print('Checked out item: ', self.blocks[j + 1].evidenceID)
@@ -273,7 +273,18 @@ class Blockchain():
                 if self.blocks[j].evidenceID == int(itemid):
                     exists = 1
                     if self.blocks[j].state == STATE['in']: # if the block contains the evidence ID and it has a state of 'checkin'
-                        self.blocks.append(Block.Block(
+                        if data == '':
+                            self.blocks.append(Block.Block(
+                                str(hashing(self.blocks[len(self.blocks) - 1])), #prev hash
+                                datetime.now(),                                  #timestamp
+                                self.blocks[j].caseID,                           #caseID
+                                itemid,                                          #evidence id
+                                STATE[reason],                                     #state
+                                0 ,                                              #datalength
+                                b'',                                   #data
+                                        ))
+                        else:
+                            self.blocks.append(Block.Block(
                                 str(hashing(self.blocks[len(self.blocks) - 1])), #prev hash
                                 datetime.now(),                                  #timestamp
                                 self.blocks[j].caseID,                           #caseID
@@ -282,6 +293,7 @@ class Blockchain():
                                 0 ,                                              #datalength
                                 data.encode(),                                   #data
                                         ))
+                                            
                         print('Case: ', self.blocks[j + 1].caseID)
                         print('Removed item: ', self.blocks[j + 1].evidenceID)
                         print('Status: ', self.blocks[j + 1].state)
