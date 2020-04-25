@@ -135,7 +135,7 @@ elif sys.argv[1] == 'add':
     sizebefore = len(bc.blocks)#store the length of the blockchain from before so we only append the new items
     
     for j in range(0,len(args.i)):
-        bc.add(args.c,args.i[j][0],b'')   #Me
+        bc.add(args.c,args.i[j][0],'')   #Me
     with open(os.environ['BCHOC_FILE_PATH'],'ab') as fp:
          for i in range (sizebefore,len(bc.blocks)):
             block_bytes= pack_block(bc.blocks[i])
@@ -153,7 +153,7 @@ elif sys.argv[1] == 'checkin':
     args = parser.parse_args(arguments)
     bc = build_blockchain_from_file(bc) # build the blockchain file
     sizeBefore = len(bc.blocks) #get the size of the file before we add any new blocks
-    bc.checkin(args.i,b'')  #add the block to the data structure
+    bc.checkin(args.i,'')  #add the block to the data structure
     for i in range(sizeBefore,len(bc.blocks)): # loop through and add append all of the new added blocks into the chain
         write_to_file(bc.blocks[i])
 
@@ -168,7 +168,7 @@ elif sys.argv[1] == 'checkout':
     args = parser.parse_args(arguments)
     bc = build_blockchain_from_file(bc) # build the blockchain file
     sizeBefore = len(bc.blocks) #get the size of the file before we add any new blocks
-    bc.checkout(args.i,b'')
+    bc.checkout(args.i,'')
     for i in range(sizeBefore,len(bc.blocks)):
         write_to_file(bc.blocks[i])
 
@@ -223,7 +223,7 @@ elif sys.argv[1] == 'remove':
     if sys.argv[5] == 'RELEASED':
         bc.remove(args.i, args.why, args.o)
     else:
-        bc.remove(args.i, args.why, b'')
+        bc.remove(args.i, args.why, '')
     for i in range(sizeBefore,len(bc.blocks)):
         write_to_file(bc.blocks[i])
 
