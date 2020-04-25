@@ -265,34 +265,37 @@ class Blockchain():
         while (count < 3): 
             stat = stat + status[count]
             count = count + 1
-        theState = stat.lower()
+        reason = stat.lower()
 
-        j = len(self.blocks) - 1
-        while j > 0:
-            if self.blocks[j].evidenceID == int(itemid):
-                exists = 1
-                if self.blocks[j].state == STATE['in']: # if the block contains the evidence ID and it has a state of 'checkin'
-                    self.blocks.append(Block.Block(
-                            str(hashing(self.blocks[len(self.blocks) - 1])), #prev hash
-                            datetime.now(),                                  #timestamp
-                            self.blocks[j].caseID,                           #caseID
-                            itemid,                                          #evidence id
-                            STATE[theState],                                     #state
-                            0 ,                                              #datalength
-                            data,                                            #data
-                                     ))
-                    print('Case: ', self.blocks[j + 1].caseID)
-                    print('Removed item: ', self.blocks[j + 1].evidenceID)
-                    print('Status: ', self.blocks[j + 1].state)
-                    #print the owner infos if the reason is RELEASED
-                    if status == STATE['rel']: 
-                        print('Owner info: ', self.blocks[j + 1].data)  #Me
-                    print('Time of action: ', self.blocks[j + 1].timestamp)
-                                            
-                    return
-                elif self.blocks[j].state == STATE['out'] or self.blocks[j].state == STATE['dis'] or self.blocks[j].state == STATE['des'] or self.blocks[j].state == STATE['rel'] or self.blocks[j].state == STATE['init']  :
-                    sys.exit('Evidence must be checked in first before remove')
-            j = j - 1
+        if reason == 'dis' or reason == 'des' or reason == 'rel':
+            j = len(self.blocks) - 1
+            while j > 0:
+                if self.blocks[j].evidenceID == int(itemid):
+                    exists = 1
+                    if self.blocks[j].state == STATE['in']: # if the block contains the evidence ID and it has a state of 'checkin'
+                        self.blocks.append(Block.Block(
+                                str(hashing(self.blocks[len(self.blocks) - 1])), #prev hash
+                                datetime.now(),                                  #timestamp
+                                self.blocks[j].caseID,                           #caseID
+                                itemid,                                          #evidence id
+                                STATE[reason],                                     #state
+                                0 ,                                              #datalength
+                                data,                                            #data
+                                        ))
+                        print('Case: ', self.blocks[j + 1].caseID)
+                        print('Removed item: ', self.blocks[j + 1].evidenceID)
+                        print('Status: ', self.blocks[j + 1].state)
+                        #print the owner infos if the reason is RELEASED
+                        if status == STATE['rel']: 
+                            print('Owner info: ', self.blocks[j + 1].data)  #Me
+                        print('Time of action: ', self.blocks[j + 1].timestamp)
+                                                
+                        return
+                    elif self.blocks[j].state == STATE['out'] or self.blocks[j].state == STATE['dis'] or self.blocks[j].state == STATE['des'] or self.blocks[j].state == STATE['rel'] or self.blocks[j].state == STATE['init']  :
+                        sys.exit('Evidence must be checked in first before remove')
+                j = j - 1
+        else:
+            sys.exit('Invalid remove reason (why) input')
         if exists == 0:
             sys.exit("This item does not exist in the blockchain")
 
