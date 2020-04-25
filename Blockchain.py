@@ -265,6 +265,7 @@ class Blockchain():
         while (count < 3): 
             stat = stat + status[count]
             count = count + 1
+        theState = stat.lower()
 
         j = len(self.blocks) - 1
         while j > 0:
@@ -276,7 +277,7 @@ class Blockchain():
                             datetime.now(),                                  #timestamp
                             self.blocks[j].caseID,                           #caseID
                             itemid,                                          #evidence id
-                            STATE[stat],                                     #state
+                            STATE[theState],                                     #state
                             0 ,                                              #datalength
                             data,                                            #data
                                      ))
