@@ -273,7 +273,7 @@ class Blockchain():
                 if self.blocks[j].evidenceID == int(itemid):
                     exists = 1
                     if self.blocks[j].state == STATE['in']: # if the block contains the evidence ID and it has a state of 'checkin'
-                        if data == '':
+                        if data == b'':
                             self.blocks.append(Block.Block(
                                 str(hashing(self.blocks[len(self.blocks) - 1])), #prev hash
                                 datetime.now(),                                  #timestamp
