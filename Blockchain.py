@@ -258,6 +258,14 @@ class Blockchain():
     # Only remove an item if that item exists in the blockchain and had been check in
     def remove (self, itemid, status, data):
         exists = 0
+
+        #retrieve the first 3 leters of the status
+        count = 0
+        stat = ''
+        while (count < 3): 
+            stat = stat + status[count]
+            count = count + 1
+
         j = len(self.blocks) - 1
         while j > 0:
             if self.blocks[j].evidenceID == int(itemid):
@@ -268,7 +276,7 @@ class Blockchain():
                             datetime.now(),                                  #timestamp
                             self.blocks[j].caseID,                           #caseID
                             itemid,                                          #evidence id
-                            status,                                          #state
+                            STATE[stat],                                     #state
                             0 ,                                              #datalength
                             data,                                            #data
                                      ))
