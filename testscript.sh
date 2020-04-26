@@ -11,4 +11,8 @@ make add_1_more
 
 make add_one_test
 
+make checkout_test
+
+make checkin_test
+
 make log_test

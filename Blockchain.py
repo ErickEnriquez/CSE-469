@@ -160,8 +160,9 @@ class Blockchain():
             print('Case: ', arr[i].caseID)
             print('Item: ', arr[i].evidenceID)
             print('Action: ', arr[i].state.decode('utf-8'))
-            print('Time: ',  datetime.fromtimestamp(arr[i].timestamp))
-            print('\n')
+            print('Time: ',  datetime.fromtimestamp(arr[i].timestamp)) 
+            if i < (len(arr)-1):
+                print('\n')
 
 
     # THis function Check in an previous registred item of the blockchain
