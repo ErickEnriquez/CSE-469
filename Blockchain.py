@@ -151,15 +151,27 @@ class Blockchain():
             self.print_log_entries(list2)
 
 
-       
-
-
+    def get_key(self,val): 
+        if val == STATE['init']:
+            return "INITIAL"
+        elif val == STATE['in']:
+            return "CHECKEDIN"
+        elif val == STATE['out']:
+            return  "CHECKEDOUT"
+        elif val == STATE ['dis']:
+            return "DISPOSED"
+        elif val == STATE ['rel']:
+            return  "RELEASED"
+        elif val == STATE ['del']:
+            return "DESTROYED"
 
     def print_log_entries(self,arr):
+
         for i in range(0,len(arr)):
+            currentState = self.get_key(arr[i].state)
             print('Case: ', arr[i].caseID)
             print('Item: ', arr[i].evidenceID)
-            print('Action: ', arr[i].state.decode())
+            print('Action: ', currentState)
             print('Time: ',  datetime.fromtimestamp(arr[i].timestamp)) 
             if i < (len(arr)-1):
                 print('\n')
