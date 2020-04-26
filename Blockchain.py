@@ -158,11 +158,11 @@ class Blockchain():
             return "CHECKEDIN"
         elif val == STATE['out']:
             return  "CHECKEDOUT"
-        elif val == STATE ['dis']:
+        elif val == STATE['dis']:
             return "DISPOSED"
-        elif val == STATE ['rel']:
+        elif val == STATE['rel']:
             return  "RELEASED"
-        elif val == STATE ['del']:
+        elif val == STATE['del']:
             return "DESTROYED"
 
     def print_log_entries(self,arr):
