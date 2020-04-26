@@ -13,8 +13,6 @@ import datetime
 
 
 
-
-
 #os.environ['BCHOC_FILE_PATH'] = 'data.bin' #THIS IS HERE FOR TESTING, NEEDS TO BE COMMENTED OUT WHEN SUBMITTING
 
 bc = Blockchain()   #initialize the blockchain

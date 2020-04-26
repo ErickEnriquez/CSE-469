@@ -159,7 +159,7 @@ class Blockchain():
         for i in range(0,len(arr)):
             print('Case: ', arr[i].caseID)
             print('Item: ', arr[i].evidenceID)
-            print('Action: ', arr[i].state)
+            print('Action: ', arr[i].state.decode())
             print('Time: ',  datetime.fromtimestamp(arr[i].timestamp)) 
             if i < (len(arr)-1):
                 print('\n')
