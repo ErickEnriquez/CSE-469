@@ -290,7 +290,7 @@ class Blockchain():
                                 self.blocks[j].caseID,                           #caseID
                                 itemid,                                          #evidence id
                                 STATE[reason],                                     #state
-                                0 ,                                              #datalength
+                                len(data) ,                                              #datalength
                                 data.encode(),                                   #data
                                         ))
                                             
