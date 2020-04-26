@@ -162,7 +162,7 @@ class Blockchain():
             return "DISPOSED"
         elif val == STATE['rel']:
             return  "RELEASED"
-        elif val == STATE['del']:
+        elif val == STATE['des']:
             return "DESTROYED"
 
     def print_log_entries(self,arr):
