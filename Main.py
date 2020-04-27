@@ -17,8 +17,6 @@ import datetime
 
 
 
-
-
 #os.environ['BCHOC_FILE_PATH'] = 'data.bin' #THIS IS HERE FOR TESTING, NEEDS TO BE COMMENTED OUT WHEN SUBMITTING
 
 bc = Blockchain()   #initialize the blockchain
@@ -222,10 +220,14 @@ elif sys.argv[1] == 'remove':
     
     #TO DO , develop the bc.remove function and then call it with the args that it needs
     sizeBefore = len(bc.blocks) #get the size of the file before we add any new blocks
-
+    ownerFlag = False
     #if the reason is RELEASED we sent the owner infos else nothing
     if sys.argv[5] == 'RELEASED':
-        bc.remove(args.i, args.why, args.o)
+        if args.o:
+            ownerFlag =True
+            bc.remove(args.i, args.why, args.o)
+        else:
+            sys.exit('Please add owner info for RElEASED')
     else:
         bc.remove(args.i, args.why, b'')
     for i in range(sizeBefore,len(bc.blocks)):
