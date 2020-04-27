@@ -1,3 +1,7 @@
+#Larissa Pokam
+#Erick Enriquez
+#Zayne Bamond
+
 #!/usr/bin/env python3
 
 import argparse  # parsing sys.argv line args
