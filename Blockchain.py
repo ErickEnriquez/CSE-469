@@ -125,30 +125,31 @@ class Blockchain():
     def parse_if_num_true(self,reverseFlag,numEntriesFlag , numEntries,caseIdFlag , caseId,evidenceIdFlag , evidenceId):
         list1 = []
         if int(numEntries) > len(self.blocks):  #if the user enters a number larger than the size of the blockchain
-            sys.exit('Error you entered a number larger than the number of blocks')
-        else:
-            if caseIdFlag == False and evidenceIdFlag == False:
-                for i in range(0,int(numEntries)):
+            #sys.exit('Error you entered a number larger than the number of blocks')
+            numEntries = str(len(self.blocks))#only print out the max amount possible if user enters to large a numbers
+        
+        if caseIdFlag == False and evidenceIdFlag == False:
+            for i in range(0,int(numEntries)):
+                list1.append(self.blocks[i])
+        elif caseIdFlag == True and evidenceId == False:
+            for i in range(0,len(self.blocks)):
+                if self.blocks[i].caseID == uuid.UUID(caseId):
                     list1.append(self.blocks[i])
-            elif caseIdFlag == True and evidenceId == False:
-                for i in range(0,len(self.blocks)):
-                    if self.blocks[i].caseID == uuid.UUID(caseId):
-                        list1.append(self.blocks[i])
-            elif caseIdFlag == False and evidenceIdFlag == True:
-                for i in range(0,len(self.blocks)):
-                    if self.blocks[i].evidenceID == int(evidenceId):
-                        list1.append(self.blocks[i])
-            elif caseIdFlag == True and evidenceIdFlag == True:
-                for i in range(0,len(self.blocks)):
-                    if self.blocks[i].evidenceID == int(evidenceId) and self.blocks[i].caseID == uuid.UUID(caseId):
-                        list1.append(self.blocks[i])
-            if len(list1) == 0:
-                return
-            elif int(numEntries) > len(list1):
-                list2 = list1
-            else:
-                list2 = list1[:int(numEntries)]
-            self.print_log_entries(list2)
+        elif caseIdFlag == False and evidenceIdFlag == True:
+            for i in range(0,len(self.blocks)):
+                if self.blocks[i].evidenceID == int(evidenceId):
+                    list1.append(self.blocks[i])
+        elif caseIdFlag == True and evidenceIdFlag == True:
+            for i in range(0,len(self.blocks)):
+                if self.blocks[i].evidenceID == int(evidenceId) and self.blocks[i].caseID == uuid.UUID(caseId):
+                    list1.append(self.blocks[i])
+        if len(list1) == 0:
+            return
+        elif int(numEntries) > len(list1):
+            list2 = list1
+        else:
+            list2 = list1[:int(numEntries)]
+        self.print_log_entries(list2)
 
 
     def get_key(self,val): 
