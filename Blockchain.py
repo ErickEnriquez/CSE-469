@@ -299,6 +299,7 @@ class Blockchain():
                                 b'',                                   #data
                                         ))
                         else:
+                            data = data+'\x00'
                             self.blocks.append(Block.Block(
                                 str(hashing(self.blocks[len(self.blocks) - 1])), #prev hash
                                 datetime.now(),                                  #timestamp

@@ -32,3 +32,6 @@ log_test:
 
 remove_no_owner:
 	./bchoc remove -i 3537722555 -y DISPOSED
+
+remove_with_owner_info:
+	./bchoc remove -i 3537722545 -y RELEASED -o "Owner information goes here goes here goes here"
