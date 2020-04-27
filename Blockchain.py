@@ -169,10 +169,12 @@ class Blockchain():
 
         for i in range(0,len(arr)):
             currentState = self.get_key(arr[i].state)
+            dateObj = datetime.fromtimestamp(arr[i].timestamp)
+            formatedStamp = dateObj.strftime('%Y-%m-%dT%I:%M:%S.%fZ')
             print('Case: ', arr[i].caseID)
             print('Item: ', arr[i].evidenceID)
             print('Action: ', currentState)
-            print('Time: ',  datetime.fromtimestamp(arr[i].timestamp)) 
+            print('Time: ',  formatedStamp) 
             if i < (len(arr)-1):
                 print('\n')
 
