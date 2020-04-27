@@ -1,3 +1,8 @@
+#Larissa Pokam
+#Erick Enriquez
+#Zayne Bamond
+
+
 # *-* coding: utf-8 *-*
 
 import random
