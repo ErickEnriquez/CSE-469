@@ -169,7 +169,7 @@ class Blockchain():
 
         for i in range(0,len(arr)):
             currentState = self.get_key(arr[i].state)
-            dateObj = datetime.fromtimestamp(arr[i].timestamp)
+            dateObj = datetime.utcfromtimestamp(arr[i].timestamp)
             formatedStamp = dateObj.strftime('%Y-%m-%dT%I:%M:%S.%fZ')
             print('Case: ', arr[i].caseID)
             print('Item: ', arr[i].evidenceID)
