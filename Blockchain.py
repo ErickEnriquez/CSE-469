@@ -264,9 +264,11 @@ class Blockchain():
                     print("State of blockchain: ERROR")
                     print("Bad block: ", i)
                     sys.exit('Backdating at block')
-        if flag:
+        if flag and len(self.blocks) != 0:
             print("Transactions in blockchain: ", len(self.blocks) - 1)
             print("State of blockchain: CLEAN")
+        else:
+            sys.exit('BAD intial Block')
 
         return flag
 
