@@ -44,7 +44,8 @@ def hashing(Block):
 def create_initial_block():
     initial_block = Block(
         str(0),  # 20 bytes : prev hash
-        datetime.fromtimestamp(0),  # 08 bytes : timestamp
+        #datetime.fromtimestamp(0),  # 08 bytes : timestamp
+        datetime.now(),
         UUID(int=0),  # 16 bytes : caseId
         0,  # 04 bytes : evidenceId
         b"INITIAL\0\0\0\0", # 11 bytes : state
