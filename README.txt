@@ -1,7 +1,7 @@
 # CSE469Project
 
 Team name:
-    Erick Enriquez   1213998902  
+    Erick Enriquez   1208001804  
     Zayne Bamond     1202500836  
     Larissa Pokam   1213998902 
   
@@ -53,9 +53,6 @@ Function Implemented:
         any requirements.
 
 How does the program works:
-    startup
-        run the setup.sh file as sudo to install the path variable and create the bchoc initially, make sure that the setup file has its
-         executable flag as on, you may need to restart the terminal to for changed to take effect.
     The way that this software needs to start is that when you first use the software the system should go through, check if there is
     a binary file that already has the initial seed block that is needed by the blockchain. The fields that this, as well as every other
     block in the blockchain, should have to include Previous hash, Timestamp, CaseID, Evidence ID, State, Data Length, and Data If the 
