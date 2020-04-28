@@ -54,15 +54,6 @@ def build_blockchain_from_file(bc):
             else:
                 block  = unpack(bytes_data)
                 block.data = fp.read(block.dataLength).decode('utf-8')
-              #  print('\n\n')
-              #  print("Previous hash: ", block.prevHash)
-              #  print("Timestamp: ", datetime.datetime.fromtimestamp(block.timestamp))
-              #  print('Case ID: ', block.caseID)
-              #  print('Evidence ID: ', block.evidenceID)
-              #  print('State: ', block.state)
-              #  print('Data length: ', block.dataLength)
-              #  print('Data: ', block.data)
-              #  print('\n\n')
                 bc.blocks.append(block)
     return bc
 
@@ -202,7 +193,7 @@ elif sys.argv[1] == 'log':
     if args.i:
         itemIdFlag = True
     bc.parse_log_command(reverseFlag,numEntriesFlag,args.n,caseIdFlag,args.c,itemIdFlag,args.i)
-    #bc.log()
+    
 
 #=======================================================================================================================================================
 
@@ -215,7 +206,6 @@ elif sys.argv[1] == 'remove':
         parser.add_argument(
             '-o', help="Information about the lawful owner to whom the evidence was released. At this time, text is free-form and does not have any requirements.")
     args = parser.parse_args(arguments)
-    #print( "THIS IS THE EVIDENCE ID ", args.i , "\nThis is the why reason" , args.why , "\nThis is the -owner if applicable " , args.o)
     #what you have to do first is call the function that will read the file and then store it in bc object
     bc = build_blockchain_from_file(bc) # build the blockchain file
     
