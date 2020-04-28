@@ -1,3 +1,7 @@
+#Larissa Pokam
+#Erick Enriquez
+#Zayne Bamond
+
 #!/usr/bin/env python3
 
 import argparse  # parsing sys.argv line args
@@ -9,8 +13,6 @@ from Block import printBlock
 from BlockPack import pack_block,unpack#functions I created to pack and unpack a block
 from Blockchain import Blockchain
 import datetime
-
-
 
 
 
@@ -51,15 +53,6 @@ def build_blockchain_from_file(bc):
             else:
                 block  = unpack(bytes_data)
                 block.data = fp.read(block.dataLength).decode('utf-8')
-              #  print('\n\n')
-              #  print("Previous hash: ", block.prevHash)
-              #  print("Timestamp: ", datetime.datetime.fromtimestamp(block.timestamp))
-              #  print('Case ID: ', block.caseID)
-              #  print('Evidence ID: ', block.evidenceID)
-              #  print('State: ', block.state)
-              #  print('Data length: ', block.dataLength)
-              #  print('Data: ', block.data)
-              #  print('\n\n')
                 bc.blocks.append(block)
     return bc
 
@@ -135,7 +128,7 @@ elif sys.argv[1] == 'add':
     sizebefore = len(bc.blocks)#store the length of the blockchain from before so we only append the new items
     
     for j in range(0,len(args.i)):
-        bc.add(args.c,args.i[j][0])
+        bc.add(args.c,args.i[j][0],b'')   #Me
     with open(os.environ['BCHOC_FILE_PATH'],'ab') as fp:
          for i in range (sizebefore,len(bc.blocks)):
             block_bytes= pack_block(bc.blocks[i])
@@ -153,7 +146,7 @@ elif sys.argv[1] == 'checkin':
     args = parser.parse_args(arguments)
     bc = build_blockchain_from_file(bc) # build the blockchain file
     sizeBefore = len(bc.blocks) #get the size of the file before we add any new blocks
-    bc.checkin(args.i)  #add the block to the data structure
+    bc.checkin(args.i,b'')  #add the block to the data structure
     for i in range(sizeBefore,len(bc.blocks)): # loop through and add append all of the new added blocks into the chain
         write_to_file(bc.blocks[i])
 
@@ -168,7 +161,7 @@ elif sys.argv[1] == 'checkout':
     args = parser.parse_args(arguments)
     bc = build_blockchain_from_file(bc) # build the blockchain file
     sizeBefore = len(bc.blocks) #get the size of the file before we add any new blocks
-    bc.checkout(args.i)
+    bc.checkout(args.i,b'')
     for i in range(sizeBefore,len(bc.blocks)):
         write_to_file(bc.blocks[i])
 
@@ -199,7 +192,7 @@ elif sys.argv[1] == 'log':
     if args.i:
         itemIdFlag = True
     bc.parse_log_command(reverseFlag,numEntriesFlag,args.n,caseIdFlag,args.c,itemIdFlag,args.i)
-    #bc.log()
+    
 
 #=======================================================================================================================================================
 
@@ -208,9 +201,27 @@ elif sys.argv[1] == 'remove':
     parser.add_argument('-i', help="Specifies the evidence item’s identifier. When used with log only blocks with the given item_id are returned. The item ID must be unique within the blockchain. This means you cannot re-add an evidence item once the remove action has been performed on it.")
     parser.add_argument(
         '-y', '--why', help="Reason for the removal of the evidence item. Must be one of: DISPOSED, DESTROYED, or RELEASED. If the reason given is RELEASED, -o must also be given.")
-    parser.add_argument(
-        '-o', help="Information about the lawful owner to whom the evidence was released. At this time, text is free-form and does not have any requirements.")
-    print('remove')
+    if sys.argv[5] == 'RELEASED':
+        parser.add_argument(
+            '-o', help="Information about the lawful owner to whom the evidence was released. At this time, text is free-form and does not have any requirements.")
+    args = parser.parse_args(arguments)
+    #what you have to do first is call the function that will read the file and then store it in bc object
+    bc = build_blockchain_from_file(bc) # build the blockchain file
+    
+    #TO DO , develop the bc.remove function and then call it with the args that it needs
+    sizeBefore = len(bc.blocks) #get the size of the file before we add any new blocks
+    ownerFlag = False
+    #if the reason is RELEASED we sent the owner infos else nothing
+    if sys.argv[5] == 'RELEASED':
+        if args.o:
+            ownerFlag =True
+            bc.remove(args.i, args.why, args.o)
+        else:
+            sys.exit('Please add owner info for RElEASED')
+    else:
+        bc.remove(args.i, args.why, b'')
+    for i in range(sizeBefore,len(bc.blocks)):
+        write_to_file(bc.blocks[i])
 
 
 #=======================================================================================================================================================

@@ -1,5 +1,6 @@
 # Larissa Pokam
 # Erick Enriquez
+#Zayne Bamond
 
 # Project1: Create a Blockchain that represent the chain of custody
 
@@ -28,7 +29,7 @@ class Blockchain():
 
 
     # Add a new block to the chain and make sure there is no item duplicate
-    def add(self, case, item):
+    def add(self, case, item, data):
         exist = 0
         for j in range(0, len(self.blocks)):
             if str(self.blocks[j].evidenceID) == item:
@@ -43,7 +44,8 @@ class Blockchain():
                    UUID(case),
                    item,
                    STATE['in'],
-                   0 
+                   0,
+                   b'',   #Me
                 ))
             else:
                 self.blocks.append(Block.Block(
@@ -52,13 +54,13 @@ class Blockchain():
                                     UUID(case),                                   #caseID
                                     item,                                   #evidence id
                                     STATE['in'],                            #state
-                                    0                                      #datalength
+                                    0,                                    #datalength
+                                    data,                                   #data
                                      ))
             print('Case: ', self.blocks[len(self.blocks) - 1].caseID)
             print('item ID: ', self.blocks[len(self.blocks) - 1].evidenceID)
             print('Status: ', self.blocks[len(self.blocks) - 1].state.decode('utf-8'))
             print('Time of action: ', self.blocks[len(self.blocks) - 1].timestamp.isoformat())
-            #print('previous hash: ' , self.blocks[len(self.blocks)-1].prevHash , " TYPE: ", type(self.blocks[len(self.blocks)-1].prevHash) ,len(self.blocks[len(self.blocks)-1].prevHash))
 
  
     #this function will create list to be printed if -n is selected then it will pass it to parse_if_num_true() function
@@ -124,49 +126,65 @@ class Blockchain():
     def parse_if_num_true(self,reverseFlag,numEntriesFlag , numEntries,caseIdFlag , caseId,evidenceIdFlag , evidenceId):
         list1 = []
         if int(numEntries) > len(self.blocks):  #if the user enters a number larger than the size of the blockchain
-            sys.exit('Error you entered a number larger than the number of blocks')
-        else:
-            if caseIdFlag == False and evidenceIdFlag == False:
-                for i in range(0,int(numEntries)):
+            #sys.exit('Error you entered a number larger than the number of blocks')
+            numEntries = str(len(self.blocks))#only print out the max amount possible if user enters to large a numbers
+        
+        if caseIdFlag == False and evidenceIdFlag == False:
+            for i in range(0,int(numEntries)):
+                list1.append(self.blocks[i])
+        elif caseIdFlag == True and evidenceId == False:
+            for i in range(0,len(self.blocks)):
+                if self.blocks[i].caseID == uuid.UUID(caseId):
                     list1.append(self.blocks[i])
-            elif caseIdFlag == True and evidenceId == False:
-                for i in range(0,len(self.blocks)):
-                    if self.blocks[i].caseID == uuid.UUID(caseId):
-                        list1.append(self.blocks[i])
-            elif caseIdFlag == False and evidenceIdFlag == True:
-                for i in range(0,len(self.blocks)):
-                    if self.blocks[i].evidenceID == int(evidenceId):
-                        list1.append(self.blocks[i])
-            elif caseIdFlag == True and evidenceIdFlag == True:
-                for i in range(0,len(self.blocks)):
-                    if self.blocks[i].evidenceID == int(evidenceId) and self.blocks[i].caseID == uuid.UUID(caseId):
-                        list1.append(self.blocks[i])
-            if len(list1) == 0:
-                return
-            elif int(numEntries) > len(list1):
-                list2 = list1
-            else:
-                list2 = list1[:int(numEntries)]
-            self.print_log_entries(list2)
+        elif caseIdFlag == False and evidenceIdFlag == True:
+            for i in range(0,len(self.blocks)):
+                if self.blocks[i].evidenceID == int(evidenceId):
+                    list1.append(self.blocks[i])
+        elif caseIdFlag == True and evidenceIdFlag == True:
+            for i in range(0,len(self.blocks)):
+                if self.blocks[i].evidenceID == int(evidenceId) and self.blocks[i].caseID == uuid.UUID(caseId):
+                    list1.append(self.blocks[i])
+        if len(list1) == 0:
+            return
+        elif int(numEntries) > len(list1):
+            list2 = list1
+        else:
+            list2 = list1[:int(numEntries)]
+        self.print_log_entries(list2)
 
 
-       
-
-
+    def get_key(self,val): 
+        if val == STATE['init']:
+            return "INITIAL"
+        elif val == STATE['in']:
+            return "CHECKEDIN"
+        elif val == STATE['out']:
+            return  "CHECKEDOUT"
+        elif val == STATE['dis']:
+            return "DISPOSED"
+        elif val == STATE['rel']:
+            return  "RELEASED"
+        elif val == STATE['des']:
+            return "DESTROYED"
 
     def print_log_entries(self,arr):
+
         for i in range(0,len(arr)):
+            currentState = self.get_key(arr[i].state)
+            dateObj = datetime.utcfromtimestamp(arr[i].timestamp)
+            formatedStamp = dateObj.strftime('%Y-%m-%dT%H:%M:%S.%fZ')
             print('Case: ', arr[i].caseID)
             print('Item: ', arr[i].evidenceID)
-            print('Action: ', arr[i].state.decode('utf-8'))
-            print('Time: ',  datetime.fromtimestamp(arr[i].timestamp))
-            print('\n')
+            print('Action: ', currentState)
+            print('Time: ',  formatedStamp) 
+            if i < (len(arr)-1):
+                print('\n')
 
 
     # THis function Check in an previous registred item of the blockchain
     # Only check in an item if that item previouly exist in the blockchain and hd been check out.
 
-    def checkin(self, itemid):
+    def checkin(self, itemid,data):
         exists = 0
         j = len(self.blocks) - 1
         while j > 0:
@@ -179,7 +197,8 @@ class Blockchain():
                             self.blocks[j].caseID,                           #caseID
                             itemid,                                          #evidence id
                             STATE['in'],                                     #state
-                            0                                                #datalength
+                            0,                                                #datalength
+                            b'',                                            #data
                                      ))
                     print('Case: ', self.blocks[j + 1].caseID)
                     print('Checked in item: ', self.blocks[j + 1].evidenceID)
@@ -194,7 +213,7 @@ class Blockchain():
 
     # Checkout an existing block from the blockchain
     # Only check out an item if that item exists in the blockchain and had been check in
-    def checkout(self, itemid):
+    def checkout(self, itemid,data):
         exists = 0
         j = len(self.blocks) - 1
         while j > 0:
@@ -207,7 +226,8 @@ class Blockchain():
                             self.blocks[j].caseID,                           #caseID
                             itemid,                                          #evidence id
                             STATE['out'],                                     #state
-                            0                                                #datalength
+                            0 ,                                               #datalength
+                            b'',                                           #data
                                      ))
                     print('Case: ', self.blocks[j + 1].caseID)
                     print('Checked out item: ', self.blocks[j + 1].evidenceID)
@@ -245,11 +265,71 @@ class Blockchain():
                     print("State of blockchain: ERROR")
                     print("Bad block: ", i)
                     sys.exit('Backdating at block')
-        if flag:
+        if flag and len(self.blocks) != 0:
             print("Transactions in blockchain: ", len(self.blocks) - 1)
             print("State of blockchain: CLEAN")
+        else:
+            sys.exit('BAD intial Block')
 
         return flag
+
+    # remove an existing block from the blockchain
+    # Only remove an item if that item exists in the blockchain and had been check in
+    def remove (self, itemid, status, data):
+        exists = 0
+
+        #retrieve the first 3 leters of the status
+        count = 0
+        stat = ''
+        while (count < 3): 
+            stat = stat + status[count]
+            count = count + 1
+        reason = stat.lower()
+
+        if reason == 'dis' or reason == 'des' or reason == 'rel':
+            j = len(self.blocks) - 1
+            while j > 0:
+                if self.blocks[j].evidenceID == int(itemid):
+                    exists = 1
+                    if self.blocks[j].state == STATE['in']: # if the block contains the evidence ID and it has a state of 'checkin'
+                        if data == b'':
+                            self.blocks.append(Block.Block(
+                                str(hashing(self.blocks[len(self.blocks) - 1])), #prev hash
+                                datetime.now(),                                  #timestamp
+                                self.blocks[j].caseID,                           #caseID
+                                itemid,                                          #evidence id
+                                STATE[reason],                                     #state
+                                0 ,                                              #datalength
+                                b'',                                   #data
+                                        ))
+                        else:
+                            data = data+'\x00'
+                            self.blocks.append(Block.Block(
+                                str(hashing(self.blocks[len(self.blocks) - 1])), #prev hash
+                                datetime.now(),                                  #timestamp
+                                self.blocks[j].caseID,                           #caseID
+                                itemid,                                          #evidence id
+                                STATE[reason],                                     #state
+                                len(data) ,                                              #datalength
+                                data.encode(),                                   #data
+                                        ))
+                                            
+                        print('Case: ', self.blocks[j + 1].caseID)
+                        print('Removed item: ', self.blocks[j + 1].evidenceID)
+                        print('Status: ', self.blocks[j + 1].state)
+                        #print the owner infos if the reason is RELEASED
+                        if status == STATE['rel']: 
+                            print('Owner info: ', self.blocks[j + 1].data)  #Me
+                        print('Time of action: ', self.blocks[j + 1].timestamp)
+                                                
+                        return
+                    elif self.blocks[j].state == STATE['out'] or self.blocks[j].state == STATE['dis'] or self.blocks[j].state == STATE['des'] or self.blocks[j].state == STATE['rel'] or self.blocks[j].state == STATE['init']  :
+                        sys.exit('Evidence must be checked in first before remove')
+                j = j - 1
+        else:
+            sys.exit('Invalid remove reason (why) input')
+        if exists == 0:
+            sys.exit("This item does not exist in the blockchain")
 
 
 STATE = {
